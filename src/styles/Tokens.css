@@ -1,0 +1,194 @@
+/* src/styles/Tokens.css */
+
+.tokens-container {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  justify-content: center;
+  gap: 20px;
+  position: sticky;
+  top: 10px;
+}
+
+/* Action Bar inside Token Row */
+.token-actions {
+  background: rgba(0, 0, 0, 0.6);
+  padding: 15px;
+  border-radius: 15px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  align-items: center;
+  width: 120px;
+  font-size: 16px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  animation: fadeInRight 0.3s ease;
+}
+
+@keyframes fadeInRight {
+  from { opacity: 0; transform: translateX(-10px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+
+.token-actions h4 {
+  margin: 0;
+  font-size: 1.1em;
+}
+
+.action-buttons {
+  display: flex;
+  flex-direction: row;
+  gap: 5px;
+  width: 100%;
+}
+
+.selected-preview {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 5px;
+}
+
+.mini-token {
+  width: 90px;
+  height: 90px;
+  border-radius: 50%;
+}
+
+.confirm-btn,
+.reset-btn {
+  width: 100%;
+  padding: 1px;
+  border-radius: 5px;
+  cursor: pointer;
+  border: 1px solid var(--color-text-light);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 40px;
+  transition: transform var(--transition-fast), filter var(--transition-base);
+}
+
+.btn-icon {
+  max-height: 100%;
+  max-width: 100%;
+  object-fit: contain;
+  pointer-events: none;
+}
+
+.confirm-btn { background: var(--color-success); }
+.confirm-btn:hover { background: var(--color-success-dark); }
+.confirm-btn:disabled { background: var(--color-text-faint); cursor: not-allowed; filter: grayscale(0.8); }
+
+.reset-btn { background: var(--color-danger); }
+.reset-btn:hover { background: var(--color-danger-dark); }
+
+/* Main Token Bank (Column) */
+.tokens-area {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 10px;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 20px;
+  position: relative;
+  z-index: var(--z-base);
+  overflow: hidden;
+}
+
+/* Background image swaps automatically via the --bg-tokens variable (variables.css) */
+.tokens-area::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image: var(--bg-tokens);
+  background-size: cover;
+  background-position: center;
+  opacity: 1;
+  z-index: -1;
+  transition: background-image var(--transition-theme);
+}
+
+.token-container {
+  position: relative;
+  width: 90px;
+  height: 90px;
+  border-radius: 50%;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+  background: transparent;
+  transition: transform var(--transition-fast);
+  cursor: default;
+}
+
+/* Interactive States */
+.token-container.interactive { cursor: pointer; }
+.token-container.interactive:active { transform: scale(0.95); }
+.token-container.interactive:hover { transform: translateY(-4px) scale(1.02); }
+.token-container.dimmed { opacity: 0.3; cursor: not-allowed; }
+
+.token-img {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  object-fit: cover;
+  box-shadow:
+    4px 6px 8px rgba(0, 0, 0, 0.6),
+    inset -4px -4px 10px rgba(0, 0, 0, 0.5), /* Shadow side */
+    inset 4px 4px 10px rgba(255, 255, 255, 0.4); /* Highlight side */
+}
+
+.token-count {
+  position: absolute;
+  top: 20%;
+  left: 80%;
+  transform: translate(-50%, -50%);
+  font-size: 60px;
+  font-weight: bold;
+  color: darkorange;
+  text-shadow: 3px 3px 3px black, -1px -1px 0 #000;
+  pointer-events: none;
+}
+
+/* --- Glow effects ---
+   Each glow-color class only sets two variables; the shared rule below
+   draws the actual shadow. Add a new gem color by adding two variables,
+   not a whole new box-shadow block. */
+.token-glow-white { --glow-color: var(--glow-white); --glow-color-soft: var(--glow-white-soft); }
+.token-glow-blue  { --glow-color: var(--glow-blue);  --glow-color-soft: var(--glow-blue-soft); }
+.token-glow-green { --glow-color: var(--glow-green); --glow-color-soft: var(--glow-green-soft); }
+.token-glow-red   { --glow-color: var(--glow-red);   --glow-color-soft: var(--glow-red-soft); }
+.token-glow-brown { --glow-color: var(--glow-brown); --glow-color-soft: var(--glow-brown-soft); }
+.token-glow-gold  { --glow-color: var(--glow-gold);  --glow-color-soft: var(--glow-gold-soft); }
+
+.token-glow-white,
+.token-glow-blue,
+.token-glow-green,
+.token-glow-red,
+.token-glow-brown,
+.token-glow-gold {
+  box-shadow: 0 0 25px var(--glow-color), inset 0 0 10px var(--glow-color-soft);
+}
+
+/* --- Your Turn Indicator --- */
+.your-turn-indicator {
+  border-radius: 0;
+  box-shadow: none;
+  background: transparent;
+  animation: pulseTurn 2s infinite ease-in-out;
+}
+
+.your-turn-indicator .token-img {
+  border-radius: 0;
+  box-shadow: none;
+  object-fit: contain;
+  width: 120px;
+  height: 120px;
+  left: -13px;
+  top: -18px;
+  position: absolute;
+}
+
+@keyframes pulseTurn {
+  0%, 100% { transform: scale(1); filter: drop-shadow(0 0 0px rgba(255, 215, 0, 0)); }
+  50% { transform: scale(1.08); filter: drop-shadow(0 0 10px rgba(255, 215, 0, 0.8)); }
+}

@@ -1,0 +1,120 @@
+/* src/styles/App.css */
+@import './variables.css';
+
+html, body, #root, .App {
+  height: 100%;
+  overflow-y: hidden;
+  margin: 0;
+}
+
+.game-container {
+  background-color: var(--color-bg-dark);
+  background-image: url('/images/background.png');
+  background-size: 100% 100%;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  color: var(--color-text-light);
+  min-height: 100vh;
+  padding: 10px;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  position: relative;
+  overflow-x: hidden;
+  overflow-y: hidden;
+  box-sizing: border-box;
+}
+
+/* THE MAIN 3-COLUMN LAYOUT */
+.game-layout {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 8px; /* Space for turn badge */
+}
+
+.Toastify__toast {
+  width: 450px !important; /* Widen container */
+  max-width: 90vw; /* Safety for mobile */
+}
+
+.Toastify__toast-body {
+  width: 100%;
+  margin: 0 !important;
+  padding: 0 !important;
+  text-align: center !important;
+  justify-content: center !important;
+  display: flex !important;
+  white-space: nowrap; /* Prevent wrapping */
+  font-size: 1.3rem;
+}
+
+/* Toast variants share the same background skin; only add per-variant tweaks below it */
+.Toastify__toast--info,
+.Toastify__toast--warning,
+.Toastify__toast--success,
+.Toastify__toast--error {
+  background: url('/images/toast.png') no-repeat center/100% 100% !important;
+  color: var(--color-text-light);
+  text-shadow: 0 0 8px rgba(0, 0, 0, 0.9), 2px 2px 4px rgba(0, 0, 0, 0.8);
+  justify-content: center !important;
+  text-align: center !important;
+  font-weight: bold;
+}
+
+.Toastify__toast--success {
+  font-size: 1.5rem !important;
+}
+
+.Toastify__progress-bar {
+  background: rgba(255, 255, 255, 0.7) !important;
+}
+
+.left-panel,
+.middle-panel {
+  flex: 0 0 auto;
+}
+
+.right-panel {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  max-width: 1200px;
+}
+ 
+
+.loading {
+  color: var(--color-text-light);
+  text-align: center;
+  margin-top: 50px;
+  font-size: 20px;
+}
+
+.turn-badge {
+  position: fixed;
+  top: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--color-success);
+  color: var(--color-text-light);
+  font-weight: 900;
+  padding: 10px 30px;
+  border-radius: 50px;
+  box-shadow: 0 0 20px var(--glow-green);
+  z-index: var(--z-badge);
+  animation: slideDownFade 0.5s ease;
+  border: 3px solid var(--color-text-light);
+  font-size: 20px;
+}
+
+.badge-alert {
+  background: var(--color-danger);
+  box-shadow: 0 0 20px var(--glow-red);
+}
+
+@keyframes slideDownFade {
+  0% { opacity: 0; transform: translateX(-50%) translateY(-20px); }
+  100% { opacity: 1; transform: translateX(-50%) translateY(0); }
+}

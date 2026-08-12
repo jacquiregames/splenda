@@ -1,0 +1,184 @@
+/* src/styles/HowToPlay.css */
+
+.how-to-play-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.8);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: var(--z-how-to-play);
+  backdrop-filter: blur(5px);
+  animation: fadeIn 0.3s ease;
+}
+
+.how-to-play-modal {
+  background: linear-gradient(135deg, var(--color-bg-dark), var(--color-bg-dark-alt));
+  border: 3px solid var(--color-gold);
+  border-radius: 15px;
+  padding: 30px;
+  max-width: 1200px; /* Wide enough to accommodate the token image */
+  max-height: 85vh;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden; /* Modal itself stays fixed; the text column scrolls */
+  color: var(--color-text-light);
+  box-shadow: var(--shadow-modal);
+  position: relative;
+}
+
+.how-to-play-modal h2 {
+  color: var(--color-gold);
+  margin-top: 0;
+  text-align: center;
+  text-transform: uppercase;
+  font-size: 28px;
+  flex-shrink: 0; /* Prevent the title from squishing */
+}
+
+/* --- Split Layout Container --- */
+.how-to-play-content {
+  display: flex;
+  flex-direction: row;
+  gap: 30px;
+  margin-top: 1px;
+  overflow: hidden;
+  min-height: 0; /* Allows the text column to shrink and scroll internally */
+}
+
+/* --- Left Column: Text --- */
+.how-to-play-text {
+  flex: 1;
+  overflow-y: auto;
+  padding-right: 15px; /* Keep text clear of the scrollbar */
+}
+
+/* Custom Scrollbar for the text area */
+.how-to-play-text::-webkit-scrollbar {
+  width: 8px;
+}
+.how-to-play-text::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 4px;
+}
+.how-to-play-text::-webkit-scrollbar-thumb {
+  background: var(--color-gold);
+  border-radius: 4px;
+}
+
+.how-to-play-modal h3 {
+  color: var(--color-success);
+  margin-bottom: 10px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+  padding-bottom: 5px;
+}
+
+.how-to-play-modal ul {
+  margin-top: 0;
+  padding-left: 20px;
+}
+
+.how-to-play-modal li {
+  margin-bottom: 8px;
+  font-size: 16px;
+}
+
+/* --- Right Column: Image --- */
+/* --- Right Column: Image --- */
+.how-to-play-image-container {
+  flex: 0 0 auto;
+  display: flex;
+  flex-direction: row; /* Ensure tokens and cards sit side-by-side */
+  gap: 20px;           /* Space between tokens and the card column */
+  align-items: center;
+  justify-content: center;
+}
+
+.how-to-play-tokens-img {
+  max-height: 60vh; /* Keeps the image from forcing the modal out of bounds vertically */
+  max-width: 250px;
+  border-radius: 10px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
+  object-fit: contain;
+}
+
+/* --- NEW: Card Column Styles --- */
+.how-to-play-cards-column {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  justify-content: center;
+  align-items: center;
+}
+
+.how-to-play-card-img {
+  border-radius: 8px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
+  object-fit: contain;
+  border: 3px solid var(--color-gold); /* Matches the classic game aesthetic */
+}
+
+/* Scaled down slightly from native size (140x200) to fit nicely in the modal */
+.noble-example {
+  width: 150px;
+  height: auto;
+}
+
+.card-example {
+  width: 150px;
+  height: auto; 
+}
+.close-modal-btn {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  background: var(--color-danger);
+  color: var(--color-text-light);
+  border: none;
+  border-radius: 5px;
+  padding: 5px 15px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background 0.2s;
+  z-index: var(--z-card-hover);
+}
+
+.close-modal-btn:hover {
+  background: var(--color-danger-dark);
+}
+
+/* Modal Open Buttons */
+.how-to-play-btn {
+  background: transparent;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  transition: transform 0.2s ease;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.how-to-play-btn img {
+  width: 100%;
+  height: auto;
+  object-fit: contain;
+  filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.5));
+}
+
+.how-to-play-btn:hover {
+  transform: scale(1.05);
+}
+
+.lobby-htp-btn {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  z-index: var(--z-active-player);
+  width: 150px;
+}
+
+.game-htp-btn {
+  width: 130px;
+  margin-top: 20px;
+}

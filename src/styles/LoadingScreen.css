@@ -1,0 +1,54 @@
+/* src/styles/LoadingScreen.css */
+
+.loading-screen-container {
+  position: fixed;
+  inset: 0;
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background-color: var(--color-bg-dark); /* Matches game background */
+  background-image: url('/images/background.png');
+  background-size: cover;
+  z-index: var(--z-loading-screen);
+}
+
+.loading-text {
+  color: var(--color-text-light);
+  margin-top: 20px;
+  font-family: 'Segoe UI', sans-serif;
+  font-size: 1.2rem;
+  letter-spacing: 2px;
+  animation: pulse 1.5s infinite;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.8);
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 0.5; }
+  50% { opacity: 1; }
+}
+
+.loader {
+  display: inline-flex;
+  gap: 10px;
+}
+.loader:before,
+.loader:after {
+  content: "";
+  height: 20px;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background:
+    radial-gradient(farthest-side, #000 95%, #0000) 50% / 8px 8px no-repeat
+    #fff;
+  animation: l10 1.5s infinite alternate;
+}
+.loader:after {
+  --s: -1;
+}
+@keyframes l10 {
+  0%, 20% { transform: scaleX(var(--s, 1)) rotate(0deg); clip-path: inset(0); }
+  60%, 100% { transform: scaleX(var(--s, 1)) rotate(30deg); clip-path: inset(40% 0 0); }
+}

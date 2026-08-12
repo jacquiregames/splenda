@@ -1,0 +1,458 @@
+/* src/styles/Players.css */
+
+.player-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  align-items: flex-start;
+  width: 100%;
+  padding-bottom: 20px;
+}
+
+/* --- OPPONENTS CONTAINER --- */
+.opponents-row {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap; /* Keep opponents in a solid row */
+  gap: 10px;
+  margin-top: 20px;
+  width: auto; /* Hug the content rather than filling 100% */
+  justify-content: flex-start;
+  flex-shrink: 0;
+}
+
+/* --- MAIN PLAYER CARD WRAPPER --- */
+.player-summary {
+  background: var(--overlay-light-panel);
+  padding: 10px;
+  border-radius: 15px;
+  width: 920px;
+  min-height: 520px;
+  border: 3px solid transparent;
+  display: flex;
+  flex-direction: column;
+
+  /* Positioning context for the background image layer */
+  position: relative;
+  overflow: hidden;
+  z-index: var(--z-base);
+
+  transition: all 0.3s ease;
+  box-shadow: var(--shadow-panel);
+  flex-shrink: 0;
+}
+
+/* Background image swaps automatically via the --bg-player variable (variables.css) */
+.player-summary::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image: var(--bg-player);
+  background-size: cover;
+  background-position: center;
+  opacity: 1;
+  z-index: -1;
+  pointer-events: none;
+
+  /* Invisible border to maintain size when active vs inactive */
+  border: 3px solid transparent;
+  box-shadow: 0 0 40px rgba(46, 204, 113, 0);
+}
+
+/* Wrapper for GameLog + Toggle */
+.sidebar-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-left: 2px;
+}
+
+/* --- HEADER (Name, Points, Nobles) --- */
+.player-header-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  border-bottom: 1px solid black;
+  padding-bottom: 1px;
+}
+
+.header-left-group {
+  display: flex;
+  align-items: center;
+}
+
+/* Container for "# - Name" */
+.p-identity {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  margin-left: 10px;
+  white-space: nowrap;
+}
+.p-score {
+  font-family: "Luckiest Guy", cursive;
+  font-size: 40px;
+  font-weight: 400; 
+  color: var(--color-text-light);
+  text-shadow: var(--shadow-text);
+  border: 3px solid orange;
+  background: black; 
+  padding: 4px;
+  display: inline-block; /* Required for transforms to work */  
+}
+
+/* Jackpot style number bump */
+@keyframes scoreBump {
+  0%   { transform: scale(1); }
+  40%  { 
+    transform: scale(1.18); 
+    color: #ffe36b; 
+    text-shadow: 0 0 14px #ffd700, 0 0 28px #ffd700; 
+  }
+  100% { transform: scale(1); }
+}
+
+.score-increase-anim {
+  animation: scoreBump 0.35s ease;
+  will-change: transform, color, text-shadow;
+}  
+ 
+.p-token-count {
+  font-size: 32px;
+  font-weight: 900;
+  color: darkorange;
+  text-shadow: var(--shadow-text);
+}
+.p-separator {
+  font-size: 28px;
+  color: rgba(255, 255, 255, 1);
+  font-weight: bold;
+}
+.p-name {
+  font-size: 28px;
+  font-weight: 900;
+  color: var(--color-white);
+  text-shadow: var(--shadow-text);
+  letter-spacing: 1px;
+}
+
+.token-staging-row {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  margin-left: 10px;
+  gap: 18px;
+  animation: fadeIn 0.2s ease;
+}
+
+.staging-tokens {
+  display: flex;
+  gap: 5px;
+}
+
+.staging-token-img {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
+  filter: drop-shadow(0 0 12px rgba(255, 255, 255, 1));
+}
+
+.staging-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.token-staging-row.discard-mode {
+  background: var(--color-danger-dark);
+  border: 2px solid var(--color-danger-dark);
+  border-radius: 10px;
+  padding: 5px 15px;
+  gap: 12px;
+  animation: pulseRed 2.5s infinite;
+  flex-direction: row;
+  align-items: center;
+}
+
+.discard-prompt {
+  display: flex;
+  flex-direction: column;
+  color: var(--color-text-light);
+  font-weight: bold;
+  text-align: left;
+}
+
+.discard-prompt h3 {
+  margin: 0;
+  font-size: 1.1rem;
+  color: yellow;
+  text-transform: uppercase;
+}
+
+.discard-prompt p {
+  margin: 0;
+}
+
+.p-nobles {
+  display: flex;
+  gap: 10px;
+}
+.mini-noble {
+  width: 60px;
+  height: 60px;
+  border: 2px solid gold;
+  border-radius: 6px;
+  box-shadow: 0 4px 8px black;
+}
+
+/* --- MAIN BODY LAYOUT --- */
+.player-card-body {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  gap: 12px;
+  width: 100%;
+}
+
+/* --- COLOR COLUMN --- */
+.strategy-column {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 140px;
+  gap: 12px;
+}
+
+.micro-token-wrapper {
+  position: relative;
+  width: 90px;
+  height: 90px;
+  transition: transform 0.2s;
+  z-index: 5;
+}
+
+.micro-token-img {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.6);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.micro-token-count {
+  position: absolute;
+  top: 20%;
+  left: 80%;
+  transform: translate(-50%, -50%);
+  font-size: 60px;
+  font-weight: 900;
+  color: darkorange;
+  text-shadow: 3px 3px 3px #000, -1px -1px 0 #000;
+  pointer-events: none;
+}
+
+/* CARD STACK */
+.p-purchased-stack {
+  position: relative;
+  width: 140px;
+  height: 220px;
+}
+
+.stacked-card {
+  width: 140px;
+  height: 200px;
+  border-radius: 8px;
+  position: absolute;
+  left: 0;
+  box-shadow: var(--shadow-card);
+  transition: transform 0.2s, z-index 0.2s;
+  border: 1px solid rgba(0, 0, 0, 0.2);
+}
+
+.stacked-card:hover {
+  z-index: var(--z-active-player);
+  transform: translateY(-50px) scale(1.05);
+  border: 2px solid var(--color-text-light);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.8);
+}
+
+/* --- OPPONENT SCALING ---
+   Scale factor shrinks as more players join so everyone fits on screen.
+   940x550 is the unscaled player-card footprint. */
+.opponents-row.count-2 .opponent-slot {
+  width: 470px;
+  height: 275px;
+}
+.opponents-row.count-2 .other-player-summary {
+  transform: scale(0.5);
+  transform-origin: top left;
+  margin: 0;
+  width: 940px;
+}
+
+.opponents-row.count-3 .opponent-slot {
+  width: 376px;
+  height: 220px;
+}
+.opponents-row.count-3 .other-player-summary {
+  transform: scale(0.4);
+  transform-origin: top left;
+  margin: 0;
+  width: 940px;
+}
+
+.opponents-row.count-4 .opponent-slot {
+  width: 252px;
+  height: 149px;
+}
+.opponents-row.count-4 .other-player-summary {
+  transform: scale(0.27);
+  transform-origin: top left;
+  margin: 0;
+  width: 940px;
+}
+
+/* --- RESERVED AREA --- */
+.reserved-column {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 140px;
+  gap: 15px;
+  padding-left: 10px;
+  margin-left: 10px;
+}
+
+.reserved-label {
+  color: var(--color-gold-dark);
+  font-size: 14px;
+  text-transform: uppercase;
+  font-weight: 900;
+  letter-spacing: 1px;
+  margin-top: -5px;
+  margin-bottom: 5px;
+}
+
+.reserved-cards-stack {
+  position: relative;
+  width: 140px;
+  height: 220px;
+  display: block;
+}
+
+.res-card-img,
+.res-back {
+  width: 140px;
+  height: 200px;
+  border-radius: 8px;
+  position: absolute;
+  left: 0;
+  box-shadow: var(--shadow-card);
+  transition: transform 0.2s, z-index 0.2s;
+}
+
+.res-card-img {
+  border: 2px solid gold;
+  cursor: pointer;
+}
+
+.res-back {
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  object-fit: cover;
+}
+
+.res-card-img:hover,
+.res-back:hover {
+  transform: translateY(-50px) scale(1.05);
+  z-index: var(--z-active-player);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.8);
+}
+
+/* --- ACTIVE TURN INDICATOR --- */
+.player-summary.active-p {
+  border: 3px solid yellow;
+  box-shadow: 0 0 40px var(--glow-green);
+  z-index: var(--z-active-player);
+}
+
+@keyframes pulseRed {
+  0% { box-shadow: 0 0 0 0 rgba(192, 57, 43, 0.5); }
+  70% { box-shadow: 0 0 0 10px rgba(192, 57, 43, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(192, 57, 43, 0); }
+}
+
+/* --- LAST MOVE HIGHLIGHT EFFECTS --- */
+
+@keyframes neonGlowToken {
+  0%, 100% {
+    box-shadow: 0 0 8px var(--color-neon-purple), 0 0 16px rgba(139, 92, 246, 0.5);
+    border-color: var(--color-neon-purple);
+  }
+  50% {
+    box-shadow:
+      0 0 15px var(--color-neon-cyan),
+      0 0 30px var(--color-neon-cyan),
+      inset 0 0 10px rgba(34, 211, 238, 0.6);
+    border-color: var(--color-neon-cyan);
+  }
+}
+
+@keyframes neonGlowCard {
+  0%, 100% {
+    box-shadow:
+      var(--shadow-card),
+      0 0 8px var(--color-neon-purple),
+      0 0 16px rgba(139, 92, 246, 0.5);
+    border-color: var(--color-neon-purple);
+  }
+  50% {
+    box-shadow:
+      var(--shadow-card),
+      0 0 20px var(--color-neon-cyan),
+      0 0 40px var(--color-neon-cyan);
+    border-color: var(--color-neon-cyan);
+  }
+}
+ 
+.player-card-body .last-move-glow-token {
+  animation: neonGlowToken 1.5s infinite ease-in-out;
+  border: 3px solid var(--color-neon-purple);
+}
+
+.player-card-body .last-move-glow-card {
+  animation: neonGlowCard 1.5s infinite ease-in-out;
+  border: 3px solid var(--color-neon-purple);
+}
+
+.player-card-body .last-move-glow-card,
+.player-card-body .last-move-glow-token {
+  position: relative;
+  overflow: visible;
+}
+
+.player-card-body .last-move-glow-card::before,
+.player-card-body .last-move-glow-token::before {
+  content: "";
+  position: absolute;
+  inset: -3px;
+  border-radius: inherit;
+  background: linear-gradient(
+    90deg,
+    var(--color-neon-purple),
+    var(--color-neon-purple-light),
+    var(--color-neon-cyan),
+    var(--color-neon-cyan-dark),
+    var(--color-neon-purple)
+  );
+  background-size: 300% 300%;
+  animation: neonBorderFlow 3s linear infinite;
+  z-index: -1;
+  filter: blur(6px);
+  will-change: background-position;
+}
+
+@keyframes neonBorderFlow {
+  0% { background-position: 0% 50%; }
+  100% { background-position: 300% 50%; }
+}
