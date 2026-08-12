@@ -1,4 +1,4 @@
-# 💎 Splenda (Splendor Web Clone)
+# 💎 Splenda  
 
 Splenda is a real-time, multiplayer web implementation of the popular board game *Splendor*. Built with a **React/TypeScript** frontend and a **Python/FastAPI** backend, it features real-time WebSocket synchronization, custom CSS 3D animations, and strict server-side rules enforcement.
 
@@ -14,8 +14,7 @@ Splenda is a real-time, multiplayer web implementation of the popular board game
   - Automatic Noble visits.
   - 15-point endgame trigger and tie-breakers.
 - **Advanced UI Animations:** Custom queue-based animation engine that safely delays React state updates until cards and tokens finish physically flying across the board.
-- **Theme Support:** Toggle between Light and Dark modes.
-- **Deck Styles:** Play with the "Original" Splendor assets or switch to the custom "Splenda" deck style.
+- **Theme Support:** Toggle between Light and Dark modes. 
 - **Responsive Layout:** Dynamically scales opponent boards based on the number of players in the game to ensure everything fits on screen.
 
 ## 🛠️ Tech Stack
