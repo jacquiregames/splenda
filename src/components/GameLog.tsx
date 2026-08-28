@@ -15,7 +15,7 @@ export const GameLog: React.FC<GameLogProps> = ({ roundNumber, players, currentT
     return (
         <div className="gamelog-container">
             <div className="round-header">
-                ROUND <span className="round-num">{roundNumber}</span>
+                TURN <span className="round-num">{roundNumber}</span>
             </div>
             <div className="turn-list">
                 {players.map((p, index) => {

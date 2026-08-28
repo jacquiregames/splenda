@@ -6,29 +6,16 @@
   align-items: center;
   padding: 10px;
   border-radius: 20px;
-
-  /* Positioning context for the ::before element */
   position: relative;
-  overflow: hidden;
+  overflow: visible;  
   z-index: var(--z-base);
-
   background-color: transparent;
   border: 1px solid rgba(255, 255, 255, 0.15);
   box-shadow: var(--shadow-panel);
   flex-shrink: 0;
-
-  /* Transition for the border/shadow, NOT the background image (that's handled in ::before) */
   transition: border 0.5s ease, box-shadow 0.5s ease;
 }
 
-.theme-light .board-area {
-  border: 1px solid rgba(0, 0, 0, 0.1);
-  box-shadow: var(--shadow-panel-soft); /* Softer shadow for light mode */
-}
-
-/* --- BACKGROUND IMAGE LAYER ---
-   Image swap between themes is driven by the --bg-board variable
-   (see variables.css), so no theme-specific override is needed here. */
 .board-area::before {
   content: "";
   position: absolute;
@@ -37,9 +24,15 @@
   background-size: cover;
   background-position: center;
   opacity: 1;
-  z-index: -1; /* Behind content */
+  z-index: -1; 
   pointer-events: none;
   transition: background-image var(--transition-theme);
+  border-radius: inherit;  
+}
+
+.theme-light .board-area {
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  box-shadow: var(--shadow-panel-soft); /* Softer shadow for light mode */
 }
 
 .row {

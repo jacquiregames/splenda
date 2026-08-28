@@ -57,12 +57,20 @@ export const useSplendorSocket = (
 
         return () => {
             clearTimeout(reconnectTimer);
+            
+            // Fix: Clear the animation delay timeout on unmount
+            if (timeoutRef.current) {
+                clearTimeout(timeoutRef.current);
+                timeoutRef.current = null;
+            }
+
             if (ws.current) {
                 ws.current.onclose = null; // Prevent reconnect loop on intentional unmount
                 ws.current.close();
             }
         };
-    }, [isConnected, playerName, animationEndTime, onStateUpdate]);
+    // Fix: Added playerColor to dependency array
+    }, [isConnected, playerName, playerColor, animationEndTime, onStateUpdate]);
 
     const sendMoveRaw = (action: string, payload: any = {}) => {
         if (ws.current && ws.current.readyState === WebSocket.OPEN) {

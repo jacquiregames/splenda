@@ -1,22 +1,18 @@
 // src/assetUtils.ts
 import { IMAGE_BASE_URL } from './constants';
 
-// Phase 1: Assets needed for Login/Lobby and basic layout
 export const getCriticalUIAssets = (): string[] => {
     const urls: string[] = [];
     
     const images = [
-        // Core UI
-        'background.png', 'login.png', 'logo.png', 
-        'winner.png', 'yourturn.png', 'gamelog.png',
-        
-        // Buttons
-        'joingame.png', 'startgame.png', 'splendor.png', 'splenda.png',
+        'background.png', 'login.png', 'logo.png', 'winner.png', 
+        'yourturn.webp', 'yourturn_left.webp', 'yourturn_right.webp',
+        'joingame.png', 'startgame.png', 'gamelog.png',
         'confirm.png', 'clear.png', 'crown.png',
 
-        // Color Swatches
         'playercolors/blue.png', 'playercolors/green.png', 'playercolors/purple.png',
-        'playercolors/red.png', 'playercolors/teal.png', 'playercolors/yellow.png',
+        'playercolors/red.png', 'playercolors/teal.png', 'playercolors/yellow.png', 
+        'playercolors/grey.png',
 
         'backgrounds/dark1blue.png', 'backgrounds/dark1green.png', 'backgrounds/dark1grey.png', 'backgrounds/dark1purple.png', 
         'backgrounds/dark1red.png', 'backgrounds/dark1teal.png', 'backgrounds/dark1yellow.png', 
@@ -36,26 +32,36 @@ export const getCriticalUIAssets = (): string[] => {
     return urls;
 };
 
-// Phase 2: Assets needed for the specific game session
-export const getSpecificGameAssets = (style: 'original' | 'new'): string[] => {
+export const getSpecificGameAssets = (): string[] => {
     const urls: string[] = [];
-    const ext = style === 'new' ? 'png' : 'jpg';
+    const style = 'new';
 
-    // 1. Tokens (Essential for gameplay)
     const tokens = ['BlueToken', 'BrownToken', 'GoldToken', 'GreenToken', 'RedToken', 'WhiteToken'];
-    tokens.forEach(t => urls.push(`${IMAGE_BASE_URL}/images/${style}/tokens/${t}.${ext}`));
+    tokens.forEach(t => urls.push(`${IMAGE_BASE_URL}/images/${style}/tokens/${t}.png`));
 
-    // 2. Card Backs (Essential for rows 2/3 if we aren't loading their faces yet)
-    [1, 2, 3].forEach(r => urls.push(`${IMAGE_BASE_URL}/images/${style}/row${r}back.${ext}`));
+    [1, 2, 3].forEach(r => urls.push(`${IMAGE_BASE_URL}/images/${style}/row${r}back.png`));
 
-    // 3. Row 1 Cards ONLY (Per request: 1-40)
-    // We skip Row 2 (41-70), Row 3 (71-90), and Nobles (20001+) to save bandwidth.
     const range = { start: 1, end: 40, folder: 'row1', pad: 3 };
-    
     for (let i = range.start; i <= range.end; i++) {
         const filename = i.toString().padStart(range.pad, '0');
-        urls.push(`${IMAGE_BASE_URL}/images/${style}/${range.folder}/${filename}.${ext}`);
+        urls.push(`${IMAGE_BASE_URL}/images/${style}/${range.folder}/${filename}.png`);
     }
 
     return urls;
+};
+
+// FIX: Lifted preload logic out of the component file to support Fast Refresh HMR
+export const preloadImages = async (urls: string[]): Promise<void> => {
+    const promises = urls.map((url) => {
+        return new Promise<void>((resolve) => {
+            const img = new Image();
+            img.src = url;
+            img.onload = () => resolve();
+            img.onerror = () => {
+                console.warn(`Failed to load: ${url}`);
+                resolve(); // Resolve anyway to prevent hanging
+            };
+        });
+    });
+    await Promise.all(promises);
 };

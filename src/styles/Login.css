@@ -114,11 +114,10 @@
   border: none;
   text-align: center;
   width: 100%;
-  box-sizing: border-box; /* Prevent padding from overflowing the fixed width */
+  box-sizing: border-box; 
 }
 
-.login-box .img-action-btn,
-.login-box .img-deck-btn {
+.login-box .img-action-btn {
   padding: 0;
   background: transparent;
   border: none;
@@ -132,11 +131,10 @@
 }
 
 /* Make image fill the button area */
-.img-action-btn img,
-.img-deck-btn img {
+.img-action-btn img {
   width: 100%;
   height: 100%;
-  object-fit: fill; /* Fill the container exactly */
+  object-fit: fill;  
   pointer-events: none;
   filter: drop-shadow(0 4px 4px rgba(0, 0, 0, 0.5));
 }
@@ -222,39 +220,7 @@
   transform: none;
   box-shadow: none;
 }
-
-/* --- DECK SELECTOR --- */
-.deck-selector {
-  margin: 15px 0;
-  text-align: center;
-  color: var(--color-text-muted);
-}
-.deck-options {
-  display: flex;
-  justify-content: center;
-  gap: 15px;
-  margin-top: 10px;
-}
-
-.deck-options .deck-btn {
-  width: 130px;
-  height: 50px;
-  border-radius: 8px;
-  opacity: 0.6;
-  border: 2px solid transparent;
-}
-
-.deck-options .deck-btn.active {
-  opacity: 1;
-  transform: scale(1.1);
-  border: 2px solid var(--color-gold);
-  box-shadow: 0 0 15px rgba(241, 196, 15, 0.5);
-}
-
-.deck-btn:hover {
-  transform: scale(1.05);
-  opacity: 0.8;
-}
+ 
 
 .p-tag { font-size: 0.8rem; color: var(--color-text-muted); margin-left: 10px; }
 .host-tag { background: var(--color-gold); color: black; padding: 2px 6px; border-radius: 4px; font-size: 0.7rem; font-weight: bold; }

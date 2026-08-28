@@ -11,6 +11,7 @@ import { getAssetUrl, COLORS } from '../constants';
 import type { GameState, CardData, Player } from '../types';
 import { useGameNotifications } from '../hooks/useGameNotifications';
 import { useOpponentMoveAnimator } from '../hooks/useGameAnimations';
+import { useTurnBanner } from "../hooks/useTurnBanner";
 
 interface GameScreenProps {
   playerName: string;
@@ -29,6 +30,29 @@ interface GameScreenProps {
   triggerAnimation: any;
   removeAnimation: (id: number) => void;
 }
+
+// FIX: Lifted pure function outside of component render cycle
+const getPaymentDetails = (player: Player, card: CardData) => {
+    const payment: Record<string, number> = {};
+    let goldNeeded = 0;
+    COLORS.forEach(color => {
+        const c = color.charAt(0).toUpperCase() + color.slice(1);
+        const costKey = `cost${c}` as keyof CardData;
+        const cost = (card[costKey] as number) || 0;
+        const bonus = player.cards[color] || 0;
+        const actualCost = Math.max(0, cost - bonus);
+        const playerHas = player.tokens[color] || 0;
+        
+        if (playerHas >= actualCost) {
+            if (actualCost > 0) payment[color] = actualCost;
+        } else {
+            if (playerHas > 0) payment[color] = playerHas;
+            goldNeeded += (actualCost - playerHas);
+        }
+    });
+    if (goldNeeded > 0) payment['gold'] = goldNeeded;
+    return payment;
+};
 
 export const GameScreen: React.FC<GameScreenProps> = ({
   playerName, gameState, theme, onThemeToggle, useGreyBg, setUseGreyBg, showHowToPlay, setShowHowToPlay,
@@ -49,7 +73,6 @@ export const GameScreen: React.FC<GameScreenProps> = ({
   const isDiscardValid = totalTokens - selectedTokens.length === 10;
   const excessCount = totalTokens > 10 ? totalTokens - 10 : 0;
 
-  // Auto-clear selected tokens when round resets
   useEffect(() => { setSelectedTokens([]); }, [gameState]);
 
   useGameNotifications(gameState, !!isMyTurn, !!isDiscarding, !!isSelectingNoble);
@@ -62,28 +85,6 @@ export const GameScreen: React.FC<GameScreenProps> = ({
   }, []);
 
   useOpponentMoveAnimator(gameState, playerName, triggerAnimation, executeWithFocus);
-
-  const getPaymentDetails = (player: Player, card: CardData) => {
-      const payment: Record<string, number> = {};
-      let goldNeeded = 0;
-      COLORS.forEach(color => {
-          const c = color.charAt(0).toUpperCase() + color.slice(1);
-          const costKey = `cost${c}` as keyof CardData;
-          const cost = (card[costKey] as number) || 0;
-          const bonus = player.cards[color] || 0;
-          const actualCost = Math.max(0, cost - bonus);
-          const playerHas = player.tokens[color] || 0;
-          
-          if (playerHas >= actualCost) {
-              if (actualCost > 0) payment[color] = actualCost;
-          } else {
-              if (playerHas > 0) payment[color] = playerHas;
-              goldNeeded += (actualCost - playerHas);
-          }
-      });
-      if (goldNeeded > 0) payment['gold'] = goldNeeded;
-      return payment;
-  };
 
   const calculateGoldNeeded = (card: CardData) => {
     if (!me || !card) return 0;
@@ -100,8 +101,7 @@ export const GameScreen: React.FC<GameScreenProps> = ({
     return goldNeeded;
   };
 
-  const sendMove = (action: string, payload: any = {}) => {
-    const style = gameState.deck_style || 'original';
+  const sendMove = (action: string, payload: any = {}) => { 
     executeWithFocus(playerName, () => {
         const getEl = (id: string) => document.getElementById(`${id}-peek`) || document.getElementById(id);
 
@@ -129,17 +129,16 @@ export const GameScreen: React.FC<GameScreenProps> = ({
                     }
                 }
             }
-
             if (card && me) {
                 const color = card.gemColor?.toLowerCase() || 'white';
                 const endCardIds = [`player-stack-${playerName}-${color}-peek`, `player-stack-${playerName}-${color}`];
-                triggerAnimation(getAssetUrl(card.FileName, 'card', style), startElCard, endCardIds, 0, undefined, false, 'card', playerName);
+                triggerAnimation(getAssetUrl(card.FileName, 'card'), startElCard, endCardIds, 0, undefined, false, 'card', playerName);
                 
                 if (action === 'BUY') {
                     const { row, cardIndex } = payload;
                     const deckStartEl = document.getElementById(`deck-back-${row}`);
                     const slotEndId = `board-card-${row}-${cardIndex}`; 
-                    triggerAnimation(getAssetUrl(`images/row${row}back.jpg`, 'card', style), deckStartEl, slotEndId, 100, undefined, 'half', 'card', playerName);
+                    triggerAnimation(getAssetUrl(`images/row${row}back.png`, 'card'), deckStartEl, slotEndId, 100, undefined, 'half', 'card', playerName);
                 }
 
                 const payment = getPaymentDetails(me, card);
@@ -149,7 +148,7 @@ export const GameScreen: React.FC<GameScreenProps> = ({
                         const tokenStartEl = getEl(`player-token-${playerName}-${payColor}`);
                         const tokenEndId = `token-bank-${payColor}`;
                         stagger += 80; 
-                        triggerAnimation(getAssetUrl(payColor, 'token', style), tokenStartEl, tokenEndId, stagger, undefined, false, 'token', playerName);
+                        triggerAnimation(getAssetUrl(payColor, 'token'), tokenStartEl, tokenEndId, stagger, undefined, false, 'token', playerName);
                     }
                 });
             }
@@ -161,7 +160,7 @@ export const GameScreen: React.FC<GameScreenProps> = ({
                 const endTargets = [`reserved-card-${playerName}-${nextSlot}-peek`, `reserved-card-${playerName}-${nextSlot}`];
 
                 if (cardIndex === "deck") {
-                    triggerAnimation(getAssetUrl(`images/row${row}back.jpg`, 'card', style), deckStartEl, endTargets, 0, undefined, false, 'card', playerName);
+                    triggerAnimation(getAssetUrl(`images/row${row}back.png`, 'card'), deckStartEl, endTargets, 0, undefined, false, 'card', playerName);
                 } else {
                     const levelKey = `level${row}` as 'level1' | 'level2' | 'level3';
                     const card = gameState.board[levelKey][cardIndex];
@@ -171,15 +170,15 @@ export const GameScreen: React.FC<GameScreenProps> = ({
                         startEl.style.pointerEvents = 'none'; 
                     }
                     
-                    triggerAnimation(getAssetUrl(card.FileName, 'card', style), startEl, endTargets, 0, undefined, false, 'card', playerName);
+                    triggerAnimation(getAssetUrl(card.FileName, 'card'), startEl, endTargets, 0, undefined, false, 'card', playerName);
                     const slotEndId = `board-card-${row}-${cardIndex}`;
-                    triggerAnimation(getAssetUrl(`images/row${row}back.jpg`, 'card', style), deckStartEl, slotEndId, 100, undefined, 'half', 'card', playerName);
+                    triggerAnimation(getAssetUrl(`images/row${row}back.png`, 'card'), deckStartEl, slotEndId, 100, undefined, 'half', 'card', playerName);
                 }
 
                 if (gameState.board.tokens.gold > 0) {
                     const goldStart = document.getElementById('token-bank-gold');
                     const goldEnd = [`player-token-${playerName}-gold-peek`, `player-token-${playerName}-gold`];
-                    triggerAnimation(getAssetUrl('gold', 'token', style), goldStart, goldEnd, 200, undefined, false, 'token', playerName);
+                    triggerAnimation(getAssetUrl('gold', 'token'), goldStart, goldEnd, 200, undefined, false, 'token', playerName);
                 }
             }
         } else if (action === 'TAKE_TOKENS') {
@@ -191,13 +190,13 @@ export const GameScreen: React.FC<GameScreenProps> = ({
                     `player-tokens-header-${playerName}-peek`,
                     `player-tokens-header-${playerName}`
                 ];
-                triggerAnimation(getAssetUrl(color, 'token', style), startEl, endTargets, i * 100, undefined, false, 'token', playerName);
+                triggerAnimation(getAssetUrl(color, 'token'), startEl, endTargets, i * 100, undefined, false, 'token', playerName);
             });
         } else if (action === 'DISCARD_TOKENS') { 
             payload.tokens.forEach((color: string, i: number) => {
                 const startEl = getEl(`player-token-${playerName}-${color}`);
                 const endTargets = [`token-bank-${color}`];
-                triggerAnimation(getAssetUrl(color, 'token', style), startEl, endTargets, i * 100, undefined, false, 'token', playerName);
+                triggerAnimation(getAssetUrl(color, 'token'), startEl, endTargets, i * 100, undefined, false, 'token', playerName);
             });
              
         } else if (action === 'SELECT_NOBLE') {
@@ -205,7 +204,7 @@ export const GameScreen: React.FC<GameScreenProps> = ({
             const startEl = document.getElementById(`noble-${nobleIndex}`);
             const endTargets = [`player-tokens-header-${playerName}-peek`, `player-tokens-header-${playerName}`];
             if (startEl && gameState.board.nobles[nobleIndex]) {
-                triggerAnimation(getAssetUrl(gameState.board.nobles[nobleIndex].FileName, 'card', style), startEl, endTargets, 0, undefined, false, 'card', playerName);
+                triggerAnimation(getAssetUrl(gameState.board.nobles[nobleIndex].FileName, 'card'), startEl, endTargets, 0, undefined, false, 'card', playerName);
             } 
         }
 
@@ -293,6 +292,8 @@ export const GameScreen: React.FC<GameScreenProps> = ({
     return goldNeeded <= (me.tokens['gold'] || 0);
   };
 
+  const showTurnBanner = useTurnBanner(isMyTurn);
+
   const activeColor = useGreyBg ? 'grey' : (me?.color || 'blue');
   const mode = theme === 'dark' ? 'dark' : 'light';
   
@@ -302,9 +303,14 @@ export const GameScreen: React.FC<GameScreenProps> = ({
   } as React.CSSProperties;
 
   return (
-    // Apply the dynamic inline CSS variables to the root container!
     <div className={`game-container theme-${theme}`} style={dynamicStyles}>
       <YourTurnAnimation isMyTurn={!!isMyTurn} />
+      {showTurnBanner && (
+        <div className="turn-banner-overlay">
+          <img src="/images/your_turn_banner.png" alt="Your Turn!" className="turn-banner-gif" />
+        </div>
+      )}
+
       <AnimationLayer animations={animations} onComplete={removeAnimation} />
 
       {gameState?.status === 'finished' && (
@@ -323,8 +329,7 @@ export const GameScreen: React.FC<GameScreenProps> = ({
           <NobleSelectionOverlay
               nobles={gameState.board.nobles}
               pendingIndices={gameState.pending_nobles}
-              onSelect={(idx) => sendMove('SELECT_NOBLE', { nobleIndex: idx })}
-              deckStyle={gameState.deck_style || 'original'}
+              onSelect={(idx) => sendMove('SELECT_NOBLE', { nobleIndex: idx })} 
           />
       )}
 
@@ -341,6 +346,7 @@ export const GameScreen: React.FC<GameScreenProps> = ({
             isSelectingNoble={isSelectingNoble || false}
             myReservedCount={me?.reserved?.length || 0}
             isMyTurn={!!isMyTurn && !pendingMove} 
+            myId={playerName} /* <-- PASSED HERE */
           />
         </div>
 
@@ -370,8 +376,7 @@ export const GameScreen: React.FC<GameScreenProps> = ({
             onConfirmTokens={() => sendMove('TAKE_TOKENS', { tokens: selectedTokens })}
             onClearTokens={() => setSelectedTokens([])}
             isTokenMoveValid={isTokenMoveValid()}
-            isMyTurn={!!isMyTurn}
-            deckStyle={gameState?.deck_style || 'original'}
+            isMyTurn={!!isMyTurn} 
             roundNumber={gameState?.round_number || 1} 
             theme={theme}
             onThemeToggle={onThemeToggle}

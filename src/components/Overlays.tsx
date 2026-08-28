@@ -8,8 +8,7 @@ import '../styles/Overlays.css';
 interface NobleSelectionProps {
     nobles: CardData[];
     pendingIndices: number[];
-    onSelect: (idx: number) => void;
-    deckStyle: 'original' | 'new';
+    onSelect: (idx: number) => void; 
 }
 
 interface GameOverProps {
@@ -47,7 +46,7 @@ export const GoldConfirmationOverlay: React.FC<GoldConfirmProps> = ({ goldCost, 
     </div>
 );
 
-export const NobleSelectionOverlay: React.FC<NobleSelectionProps> = ({ nobles, pendingIndices, onSelect, deckStyle }) => (
+export const NobleSelectionOverlay: React.FC<NobleSelectionProps> = ({ nobles, pendingIndices, onSelect }) => (
     <div className="modal-backdrop">
         <div className="noble-selection-overlay" onClick={e => e.stopPropagation()}>
             <h2>Select a Noble</h2>
@@ -59,7 +58,7 @@ export const NobleSelectionOverlay: React.FC<NobleSelectionProps> = ({ nobles, p
                     return (
                         <img 
                             key={idx} 
-                            src={getAssetUrl(noble.FileName, 'card', deckStyle)} 
+                            src={getAssetUrl(noble.FileName, 'card')} 
                             className="noble-choice-img" 
                             onClick={() => onSelect(idx)}
                             alt="Noble" 

@@ -65,7 +65,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 40px;
+  height: 46px;
   transition: transform var(--transition-fast), filter var(--transition-base);
 }
 
@@ -76,11 +76,19 @@
   pointer-events: none;
 }
 
-.confirm-btn { background: var(--color-success); }
+.confirm-btn { 
+  background: none; 
+  filter: drop-shadow(0 0 4px #39ff14) drop-shadow(0 0 8px #39ff14);
+}
 .confirm-btn:hover { background: var(--color-success-dark); }
-.confirm-btn:disabled { background: var(--color-text-faint); cursor: not-allowed; filter: grayscale(0.8); }
+.confirm-btn:disabled {  
+  cursor: not-allowed; 
+}
 
-.reset-btn { background: var(--color-danger); }
+.reset-btn { 
+  background: none;
+  filter: drop-shadow(0 0 2px #ff0703);
+}
 .reset-btn:hover { background: var(--color-danger-dark); }
 
 /* Main Token Bank (Column) */
@@ -181,10 +189,10 @@
   border-radius: 0;
   box-shadow: none;
   object-fit: contain;
-  width: 120px;
-  height: 120px;
+  width: 118px;
+  height: auto;
   left: -13px;
-  top: -18px;
+  top: 0px;
   position: absolute;
 }
 

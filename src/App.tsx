@@ -10,12 +10,12 @@ import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 import { Lobby } from './components/Lobby';  
-import { HowToPlay } from './components/HowToPlay';
-import ImagePreloader, { preloadImages } from './components/ImagePreloader'; 
+import { HowToPlay } from './components/HowToPlay'; 
+import ImagePreloader from './components/ImagePreloader'; 
 import LoadingScreen from './components/LoadingScreen';   
-import { getCriticalUIAssets, getSpecificGameAssets } from './assetUtils';      
+import { getCriticalUIAssets, getSpecificGameAssets, preloadImages } from './assetUtils';      
 import { GameScreen } from './components/GameScreen';
-import { IMAGE_BASE_URL } from './constants'; // <-- Ensure this is imported
+import { IMAGE_BASE_URL } from './constants';
 
 const StartVideoPlayer: React.FC<{ onEnded: () => void }> = ({ onEnded }) => {
     const videoRef = useRef<HTMLVideoElement>(null);
@@ -51,7 +51,6 @@ const StartVideoPlayer: React.FC<{ onEnded: () => void }> = ({ onEnded }) => {
 
 function App() {
   const [playerName, setPlayerName] = useState(() => sessionStorage.getItem("playerName") || "");
-  // --- NEW: Track selected color ---
   const [playerColor, setPlayerColor] = useState(() => sessionStorage.getItem("playerColor") || "blue");
   const [useGreyBg, setUseGreyBg] = useState(false);
   const [gameState, setGameState] = useState<GameState | null>(null);
@@ -86,14 +85,11 @@ function App() {
 
   const { sendMoveRaw } = useSplendorSocket(playerName, playerColor, isConnected, animationEndTime, handleStateUpdate);
 
-  // Update Preload Effect
   useEffect(() => {
-      if (gameState?.status === 'active' && !gameAssetsLoaded) {
-          const style = gameState.deck_style || 'original';
-          const specificAssets = getSpecificGameAssets(style);
+      if (gameState?.status === 'active' && !gameAssetsLoaded) { 
+          const specificAssets = getSpecificGameAssets();
           const mode = theme === 'dark' ? 'dark' : 'light';
           
-          // Preload EVERY player's active color, plus grey
           const colorsToLoad = new Set(gameState.players.map(p => p.color));
           colorsToLoad.add('grey');
           
@@ -109,11 +105,11 @@ function App() {
 
           preloadImages(specificAssets).then(() => setGameAssetsLoaded(true));
       }
-  }, [gameState?.status, gameState?.deck_style, gameAssetsLoaded, theme, gameState?.players]);
+  }, [gameState?.status, gameAssetsLoaded, theme, gameState?.players]);
 
   const joinGame = () => {
     sessionStorage.setItem('playerName', playerName);
-    sessionStorage.setItem('playerColor', playerColor); // Save color pref
+    sessionStorage.setItem('playerColor', playerColor);
     setIsJoined(true);
   };
 
@@ -140,7 +136,7 @@ function App() {
                   isConnected={isConnected}
                   playerName={playerName}
                   setPlayerName={setPlayerName}
-                  playerColor={playerColor}           // Pass down color props
+                  playerColor={playerColor}
                   setPlayerColor={setPlayerColor}
                   joinGame={joinGame}
                   players={gameState?.players}
@@ -159,7 +155,7 @@ function App() {
       <ToastContainer theme="dark" />
       <GameScreen 
         playerName={playerName}
-        playerColor={playerColor}  // Pass down color to GameScreen
+        playerColor={playerColor}
         gameState={gameState}
         theme={theme}
         onThemeToggle={() => setTheme(t => (t === 'dark' ? 'light' : 'dark'))}

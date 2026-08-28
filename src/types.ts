@@ -24,7 +24,7 @@ export interface Player {
     pending_nobles?: number[];
     reserved?: CardData[];
 }
-
+ 
 export interface GameState {
     board: {
         level1: CardData[];
@@ -39,7 +39,6 @@ export interface GameState {
     winner: string | null;
     pending_nobles?: number[];
     last_round?: boolean;
-    deck_style: 'original' | 'new';  
     round_number: number;
     last_move?: {
         type: string;
@@ -48,5 +47,5 @@ export interface GameState {
         card_filename?: string;
         got_gold?: boolean;
     };
-    deck_counts: Record<number, number>; // <--- NEW
+    deck_counts: Record<number, number>; 
 }

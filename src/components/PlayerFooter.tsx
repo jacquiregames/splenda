@@ -1,5 +1,4 @@
 // src/components/PlayerFooter.tsx
-
 import React, { useState } from 'react';
 import type { Player, CardData } from '../types';
 import { getAssetUrl, COLORS } from '../constants';
@@ -18,8 +17,7 @@ interface PlayerFooterProps {
   onConfirmTokens: () => void;
   onClearTokens: () => void;
   isTokenMoveValid: boolean;
-  isMyTurn: boolean;
-  deckStyle: 'original' | 'new';
+  isMyTurn: boolean; 
   roundNumber: number;
   theme: 'dark' | 'light';
   onThemeToggle: () => void;
@@ -31,8 +29,22 @@ interface PlayerFooterProps {
   isDiscardValid: boolean;
   excessCount: number;
   lastMove?: any; 
-  actionFocusPlayerId: string | null; // <--- NEW PROP
+  actionFocusPlayerId: string | null;
 }
+
+// FIX: Lifted pure function outside of component render cycle
+const getStacks = (purchased: CardData[]) => {
+  const stacks: Record<string, CardData[]> = {
+    white: [], blue: [], green: [], red: [], brown: [],
+  };
+  purchased.forEach(card => {
+    const color = card.gemColor?.toLowerCase();
+    if (color && stacks[color]) {
+      stacks[color].push(card);
+    }
+  });
+  return stacks;
+};
 
 export const PlayerFooter: React.FC<PlayerFooterProps> = ({
   players,
@@ -44,8 +56,7 @@ export const PlayerFooter: React.FC<PlayerFooterProps> = ({
   onConfirmTokens,
   onClearTokens,
   isTokenMoveValid,
-  isMyTurn,
-  deckStyle,
+  isMyTurn, 
   roundNumber,
   theme,
   onThemeToggle,
@@ -57,22 +68,9 @@ export const PlayerFooter: React.FC<PlayerFooterProps> = ({
   isDiscardValid,
   excessCount,
   lastMove,
-  actionFocusPlayerId, // <--- NEW
+  actionFocusPlayerId,
 }) => {
   const [hoveredPlayerId, setHoveredPlayerId] = useState<string | null>(null);
-  
-  const getStacks = (purchased: CardData[]) => {
-    const stacks: Record<string, CardData[]> = {
-      white: [], blue: [], green: [], red: [], brown: [],
-    };
-    purchased.forEach(card => {
-      const color = card.gemColor?.toLowerCase();
-      if (color && stacks[color]) {
-        stacks[color].push(card);
-      }
-    });
-    return stacks;
-  };
 
   const me = players.find(p => p.id === myId);
   const others = players.filter(p => p.id !== myId);
@@ -90,23 +88,20 @@ export const PlayerFooter: React.FC<PlayerFooterProps> = ({
     const isActive = p.id === currentTurn;
     const reservedCards = p.reserved || [];
     
-    // Calculate the player's total token count
     const totalTokens = Object.values(p.tokens).reduce((sum, val) => sum + val, 0);
     
-    // Prevent DOM ID collisions during peek by appending '-peek' to the large board IDs
     const domId = (base: string) => isPeek ? `${base}-peek` : base;
     
-    // Actions are exclusively for the local player when viewing their own board
     const showTokenActions = isMe && isMyTurn && !isDiscarding && selectedTokens.length > 0;
     const showDiscardActions = isMe && isDiscarding;
     const tokensInteract = isMe && isDiscarding;
 
-    // Check if the gold token was just received via a RESERVE move by this player
     const isLastMoveGold = lastMove?.type === 'RESERVE' && lastMove.player_id === p.id && lastMove.got_gold;
     
     const effectiveColor = (isMe && useGreyBg) ? 'grey' : (p.color || 'blue');
     const mode = theme === 'dark' ? 'dark' : 'light';
     const dynamicBg = `url('/images/backgrounds/${mode}3${effectiveColor}.png')`;
+    
     return (
       <div 
         key={p.id} 
@@ -122,7 +117,7 @@ export const PlayerFooter: React.FC<PlayerFooterProps> = ({
                   {selectedTokens.map((c, i) => (
                     <img
                       key={i}
-                      src={getAssetUrl(c, 'token', deckStyle)}
+                      src={getAssetUrl(c, 'token')}
                       className="staging-token-img"
                       alt={c}
                     />
@@ -163,7 +158,7 @@ export const PlayerFooter: React.FC<PlayerFooterProps> = ({
                 {selectedTokens.map((c, i) => (
                   <img
                     key={i}
-                    src={getAssetUrl(c, 'token', deckStyle)}
+                    src={getAssetUrl(c, 'token')}
                     className="staging-token-img"
                     alt={c}
                   />
@@ -184,7 +179,7 @@ export const PlayerFooter: React.FC<PlayerFooterProps> = ({
             {p.nobles.map((noble, i) => (
               <img
                 key={i}
-                src={getAssetUrl(noble.FileName, 'card', deckStyle)}
+                src={getAssetUrl(noble.FileName, 'card')}
                 className="mini-noble"
                 title="Noble"
                 alt="Noble"
@@ -200,11 +195,10 @@ export const PlayerFooter: React.FC<PlayerFooterProps> = ({
                 return (
                   <div key={color} className="strategy-column">
                       
-                      {/* --- COLORED TOKENS --- */}
                       <div className="micro-token-wrapper" id={domId(`player-tokens-header-${p.id}`)}>
                           <img 
                               id={domId(`player-token-${p.id}-${color}`)}
-                              src={getAssetUrl(color, 'token', deckStyle)} 
+                              src={getAssetUrl(color, 'token')} 
                               className={`micro-token-img ${isLastMoveToken ? 'last-move-glow-token' : ''}`} 
                               style={{ 
                                   opacity: p.tokens[color] > 0 ? 1 : 0.2,
@@ -219,7 +213,6 @@ export const PlayerFooter: React.FC<PlayerFooterProps> = ({
                           )}
                       </div>
 
-                      {/* --- COLORED CARD STACKS --- */}
                       <div className="p-purchased-stack" id={domId(`player-stack-${p.id}-${color}`)}>
                           {stacks[color].map((card, idx) => {
                               const isLastMoveCard = lastMove?.type === 'BUY' && lastMove.player_id === p.id && lastMove.card_filename === card.FileName;
@@ -227,7 +220,7 @@ export const PlayerFooter: React.FC<PlayerFooterProps> = ({
                               return (
                                 <img 
                                     key={`${card.FileName}-${idx}`}
-                                    src={getAssetUrl(card.FileName, 'card', deckStyle)} 
+                                    src={getAssetUrl(card.FileName, 'card')} 
                                     className={`stacked-card ${isLastMoveCard ? 'last-move-glow-card' : ''}`}
                                     style={{ top: `${idx * 35}px`, zIndex: isLastMoveCard ? 99 : idx }}
                                     alt="purchased card"
@@ -240,12 +233,10 @@ export const PlayerFooter: React.FC<PlayerFooterProps> = ({
             })}
 
             <div className="reserved-column">
-                
-                {/* --- GOLD TOKEN --- */}
                 <div className="micro-token-wrapper">
                     <img 
                         id={domId(`player-token-${p.id}-gold`)} 
-                        src={getAssetUrl('gold', 'token', deckStyle)} 
+                        src={getAssetUrl('gold', 'token')} 
                         className={`micro-token-img ${isLastMoveGold ? 'last-move-glow-token' : ''}`} 
                         style={{ 
                             opacity: p.tokens.gold > 0 ? 1 : 0.2,
@@ -268,7 +259,7 @@ export const PlayerFooter: React.FC<PlayerFooterProps> = ({
                                     <img 
                                         key={i} 
                                         id={domId(`reserved-card-${p.id}-${i}`)}
-                                        src={getAssetUrl(card.FileName, 'card', deckStyle)} 
+                                        src={getAssetUrl(card.FileName, 'card')} 
                                         className="res-card-img"
                                         style={{ 
                                             border: affordable ? '3px solid #2ecc71' : '2px solid gold',
@@ -285,7 +276,7 @@ export const PlayerFooter: React.FC<PlayerFooterProps> = ({
                                     key={i} 
                                     id={domId(`reserved-card-${p.id}-${i}`)} 
                                     className="res-back"
-                                    src={getAssetUrl(`images/row${card.cardRow}back.jpg`, 'card', deckStyle)}
+                                    src={getAssetUrl(`images/row${card.cardRow}back.png`, 'card')}
                                     style={{ top: `${i * 35}px`, zIndex: i }}
                                     alt="opponent reserved card"
                                 />

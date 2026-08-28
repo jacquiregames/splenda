@@ -1,5 +1,5 @@
 // src/components/Lobby.tsx
-import React, { useState } from 'react';
+import React from 'react';
 import type { Player } from '../types';
 import { FireworksLayer } from './FireworksLayer';   
 import '../styles/Login.css';
@@ -45,9 +45,7 @@ export const Lobby: React.FC<LobbyProps> = ({
 }) => {
     const isHost = players.length > 0 && players[0].id === playerName;
     const canStart = players.length >= 2;
-    const [deckStyle, setDeckStyle] = useState<'original' | 'new'>('new');
 
-    // Dynamically derive used colors to prevent collisions
     const usedColors = players.map(p => p.color);
     const myBackendColor = players.find(p => p.id === playerName)?.color || playerColor;
 
@@ -112,28 +110,10 @@ export const Lobby: React.FC<LobbyProps> = ({
                                 >
                                     + Add Computer Bot
                                 </button>
-                                
-                                <div className="lobby-header">
-                                    <h3>Deck Style:</h3>
-                                    <div className="deck-options">
-                                        <button 
-                                            className={`deck-btn img-deck-btn ${deckStyle === 'original' ? 'active' : ''}`}
-                                            onClick={() => setDeckStyle('original')}
-                                        >
-                                            <img src="/images/splendor.png" alt="Classic" />
-                                        </button>
-                                        <button 
-                                            className={`deck-btn img-deck-btn ${deckStyle === 'new' ? 'active' : ''}`}
-                                            onClick={() => setDeckStyle('new')}
-                                        >
-                                            <img src="/images/splenda.png" alt="Splenda" />
-                                        </button>
-                                    </div>
-                                </div>
 
                                 <button 
                                     className={`start-btn img-action-btn ${!canStart ? 'disabled' : ''}`} 
-                                    onClick={() => sendMove && sendMove("START_GAME", { deckStyle })}
+                                    onClick={() => sendMove && sendMove("START_GAME")}
                                     disabled={!canStart}
                                 >
                                     <img src="/images/startgame.png" alt="Start Game" />

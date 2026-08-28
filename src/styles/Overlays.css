@@ -275,14 +275,16 @@
   transition: transform 0.2s, background 0.2s;
 }
 
-.action-buttons-row .confirm-btn {
-  background: var(--color-success);
+.action-buttons-row .confirm-btn { 
   color: var(--color-text-light);
 }
-.action-buttons-row .confirm-btn:hover { background: var(--color-success-dark); transform: scale(1.05); }
+.action-buttons-row .confirm-btn:hover { 
+ transform: scale(1.05); 
+}
 
-.action-buttons-row .reset-btn {
-  background: var(--color-danger);
+.action-buttons-row .reset-btn { 
   color: var(--color-text-light);
 }
-.action-buttons-row .reset-btn:hover { background: var(--color-danger-dark); transform: scale(1.05); }
+.action-buttons-row .reset-btn:hover {  
+  transform: scale(1.05); 
+}

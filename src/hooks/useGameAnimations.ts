@@ -97,8 +97,7 @@ export const useOpponentMoveAnimator = (
         if (move.player_id === playerName) return;
 
         // Force focus on opponent, wait 50ms for DOM render, then animate
-        executeWithFocus(move.player_id, () => {
-            const style = gameState.deck_style || 'original';
+        executeWithFocus(move.player_id, () => { 
             const oppId = move.player_id;
 
             if (move.type === 'TAKE_TOKENS' && move.tokens) {
@@ -110,7 +109,7 @@ export const useOpponentMoveAnimator = (
                         `player-tokens-header-${oppId}-peek`,
                         `player-tokens-header-${oppId}`
                     ]; 
-                    triggerAnimation(getAssetUrl(color, 'token', style), startEl, endTargets, i * 100, undefined, false, 'token', oppId);
+                    triggerAnimation(getAssetUrl(color, 'token'), startEl, endTargets, i * 100, undefined, false, 'token', oppId);
                 });
             } 
             else if (move.type === 'BUY' && move.card_filename) {
@@ -126,7 +125,7 @@ export const useOpponentMoveAnimator = (
                     `player-stack-${oppId}-${color}`
                 ];
  
-                triggerAnimation(getAssetUrl(cardFile, 'card', style), startEl, endTargets, 0, undefined, false, 'card', oppId);
+                triggerAnimation(getAssetUrl(cardFile, 'card'), startEl, endTargets, 0, undefined, false, 'card', oppId);
             }
             else if (move.type === 'RESERVE') {
                 const startEl = document.querySelector('.board-area') as HTMLElement;
@@ -142,11 +141,11 @@ export const useOpponentMoveAnimator = (
                 const row = (move as any).row || 2; 
 
                 triggerAnimation(
-                    getAssetUrl(`images/row${row}back.jpg`, 'card', style),
+                    getAssetUrl(`images/row${row}back.png`, 'card'),
                     startEl,
                     endTargets,
                     0,
-                    getAssetUrl(`images/row${row}back.jpg`, 'card', style),
+                    getAssetUrl(`images/row${row}back.png`, 'card'),
                     true,
                     'card',
                     oppId
@@ -155,7 +154,7 @@ export const useOpponentMoveAnimator = (
                 if (move.got_gold) {
                     const goldStart = document.getElementById('token-bank-gold');
                     const goldEnd = [`player-token-${oppId}-gold-peek`, `player-token-${oppId}-gold`];
-                    triggerAnimation(getAssetUrl('gold', 'token', style), goldStart, goldEnd, 200, undefined, false, 'token', oppId);
+                    triggerAnimation(getAssetUrl('gold', 'token'), goldStart, goldEnd, 200, undefined, false, 'token', oppId);
                 }
             }
             // --- NEW: Catch opponent discards and animate them! ---
@@ -163,10 +162,10 @@ export const useOpponentMoveAnimator = (
                 move.tokens.forEach((color: string, i: number) => {
                     const startEl = document.getElementById(`player-token-${oppId}-${color}`);
                     const endTargets = [`token-bank-${color}`];
-                    triggerAnimation(getAssetUrl(color, 'token', style), startEl, endTargets, i * 100, undefined, false, 'token', oppId);
+                    triggerAnimation(getAssetUrl(color, 'token'), startEl, endTargets, i * 100, undefined, false, 'token', oppId);
                 });
             }
         });
 
-    }, [gameState?.last_move, playerName, triggerAnimation, executeWithFocus, gameState?.deck_style, gameState?.players]);
+    }, [gameState?.last_move, playerName, triggerAnimation, executeWithFocus, gameState?.players]);
 }; 

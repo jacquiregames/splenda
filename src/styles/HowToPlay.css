@@ -17,7 +17,7 @@
   border: 3px solid var(--color-gold);
   border-radius: 15px;
   padding: 30px;
-  max-width: 1200px; /* Wide enough to accommodate the token image */
+  max-width: 1720px; /* Wide enough to accommodate the token image */
   max-height: 85vh;
   display: flex;
   flex-direction: column;
@@ -119,15 +119,12 @@
 }
 
 /* Scaled down slightly from native size (140x200) to fit nicely in the modal */
-.noble-example {
-  width: 150px;
-  height: auto;
+.game-example {
+  width: auto;
+  height: 150px;
 }
 
-.card-example {
-  width: 150px;
-  height: auto; 
-}
+ 
 .close-modal-btn {
   position: absolute;
   top: 15px;
