@@ -102,13 +102,13 @@ export const Lobby: React.FC<LobbyProps> = ({
                         />
 
                         {isHost ? (
-                            <div className="host-controls">
+                            <div className="host-controls"> 
                                 <button 
-                                    className="add-bot-btn" 
+                                    className="add-bot-btn img-action-btn" 
                                     onClick={() => sendMove && sendMove("ADD_BOT")}
                                     disabled={players.length >= 4}
                                 >
-                                    + Add Computer Bot
+                                    <img src="/images/addbot.png" alt="Add Computer Bot" />
                                 </button>
 
                                 <button 
