@@ -1,0 +1,35 @@
+- name: Setup pnpm
+  # You may pin to the exact commit or the version.
+  # uses: pnpm/action-setup@0977fd99725f1db4007ccb2928dbb4e90d06cc86
+  uses: pnpm/action-setup@v6.0.10
+  with:
+    # Version of pnpm to install
+    version: # optional
+    # Where to store pnpm files
+    dest: # optional, default is ~/setup-pnpm
+    # If specified, run `pnpm install`
+    run_install: # optional, default is null
+    # Whether to cache the pnpm store directory
+    cache: # optional, default is false
+    # File path to the pnpm lockfile, whose contents hash will be used as a cache key. Accepts multiple paths delimited by newlines.
+    cache_dependency_path: # optional, default is pnpm-lock.yaml
+    # File path to the package.json to read "packageManager" configuration. This path must be relative to the repository root (GITHUB_WORKSPACE).
+    package_json_file: # optional, default is package.json
+    # When set to true, @pnpm/exe, which is a Node.js bundled package, will be installed, enabling using pnpm without Node.js.
+    standalone: # optional, default is false
+
+- name: PyInstaller Windows
+  # You may pin to the exact commit or the version.
+  # uses: JackMcKew/pyinstaller-action-windows@a8dee21ad01bbc7e7363d445bb632691b95ba057
+  uses: JackMcKew/pyinstaller-action-windows@v0.1.2
+  with:
+    # Directory containing source code (optional requirements.txt).
+    path: # default is src
+    # Specify a custom URL for PYPI
+    pypi_url: # optional, default is https://pypi.python.org/
+    # Specify a custom URL for PYPI Index
+    pypi_index_url: # optional, default is https://pypi.python.org/simple
+    # Specify a file path for .spec file
+    spec: # optional, default is 
+
+  
