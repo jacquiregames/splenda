@@ -1,16 +1,5 @@
 # nobles.py
 row4 = [
-  {
-    "gemColor": None,
-    "playerPoints": 3,
-    "costWhite": 4,
-    "costBlue": 4,
-    "costGreen": 0,
-    "costRed": 0,
-    "costBrown": 0,
-    "cardRow": 4,  
-    "FileName": "20001.jpg"
-  },
   {		
     "gemColor": None,		
     "playerPoints": 3, 
@@ -20,7 +9,7 @@ row4 = [
     "costRed": 0,
     "costBrown": 0,
     "cardRow": 4,
-    "FileName": "20001.jpg"
+    "FileName": "20001.png"
   },
   {
     "gemColor": None,
@@ -31,7 +20,7 @@ row4 = [
     "costRed": 0,
     "costBrown": 0,
     "cardRow": 4,
-    "FileName": "20002.jpg"
+    "FileName": "20002.png"
   },
   {
     "gemColor": None,
@@ -42,7 +31,7 @@ row4 = [
     "costRed": 4,
     "costBrown": 0,
     "cardRow": 4,
-    "FileName": "20003.jpg"
+    "FileName": "20003.png"
   },
   {
     "gemColor": None,
@@ -53,7 +42,7 @@ row4 = [
     "costRed": 4,
     "costBrown": 4,
     "cardRow": 4,
-    "FileName": "20004.jpg"
+    "FileName": "20004.png"
   },
   {
     "gemColor": None,
@@ -64,7 +53,7 @@ row4 = [
     "costRed": 0,
     "costBrown": 4,
     "cardRow": 4,
-    "FileName": "20005.jpg"
+    "FileName": "20005.png"
   },
   {
     "gemColor": None,
@@ -75,7 +64,7 @@ row4 = [
     "costRed": 0,
     "costBrown": 3,
     "cardRow": 4,
-    "FileName": "20006.jpg"
+    "FileName": "20006.png"
   },
   {
     "gemColor": None,
@@ -86,7 +75,7 @@ row4 = [
     "costRed": 0,
     "costBrown": 0,
     "cardRow": 4,
-    "FileName": "20007.jpg"
+    "FileName": "20007.png"
   },
   {
     "gemColor": None,
@@ -97,7 +86,7 @@ row4 = [
     "costRed": 3,
     "costBrown": 0,
     "cardRow": 4,
-    "FileName": "20008.jpg"
+    "FileName": "20008.png"
   },
   {
     "gemColor": None,
@@ -108,7 +97,7 @@ row4 = [
     "costRed": 3,
     "costBrown": 3,
     "cardRow": 4,
-    "FileName": "20009.jpg"
+    "FileName": "20009.png"
   },
   {
     "gemColor": None,
@@ -119,7 +108,7 @@ row4 = [
     "costRed": 3,
     "costBrown": 3, 
     "cardRow": 4,
-    "FileName": "20010.jpg"
+    "FileName": "20010.png"
   },
   {
     "gemColor": None,
@@ -130,6 +119,6 @@ row4 = [
     "costRed": 6,
     "costBrown": 0,
     "cardRow": 4,
-    "FileName": "20011.jpg"
+    "FileName": "20011.png"
   }
 ]

@@ -16,29 +16,50 @@ def calculate_missing_tokens(card, player: Player, game: SplendorGame):
     return missing
 
 
+def _get_game_phase(game: SplendorGame) -> str:
+    """Determine the current phase of the game based on the highest score."""
+    max_points = max([p.points for p in game.players] + [0])
+    if max_points >= 11:
+        return "late"
+    elif max_points >= 6:
+        return "mid"
+    return "early"
+
+
 def _card_value(card: Card, player: Player, game: SplendorGame) -> float:
-    """How valuable is owning this card to `player`? Points matter most, but
-    a permanent color bonus compounds -- it discounts every future purchase
-    in that color for the rest of the game. A cheap card that unlocks a
-    heavily-demanded color is often worth more than its point total alone,
-    which is the core engine-building insight the old greedy bot missed
-    entirely. Nobles get a separate bonus for whichever one the player is
-    closest to completing."""
-    score = card.playerPoints * 4 + card.cardRow * 0.3
+    """Calculate the strategic value of a card based on the current game phase."""
+    phase = _get_game_phase(game)
+    
+    # Weights shift as the game progresses
+    if phase == "early":
+        point_multiplier = 2.0
+        engine_multiplier = 1.5
+    elif phase == "mid":
+        point_multiplier = 4.0
+        engine_multiplier = 1.0
+    else: # late
+        point_multiplier = 10.0 # Points are everything at the end
+        engine_multiplier = 0.1
+
+    score = card.playerPoints * point_multiplier
+    
+    # Cost efficiency bonus
+    total_cost = sum(getattr(card, game.cost_map[c]) for c in game.colors)
+    if total_cost > 0:
+        score += (card.playerPoints / total_cost) * 2.0
 
     gem = (card.gemColor or "").lower()
     if gem in game.colors:
-        # Engine value: how much do the cards currently visible on the board
-        # collectively demand this color? A high-demand color bonus pays for
-        # itself over and over across the rest of the game.
+        # Engine value: how much do the cards currently visible on the board demand this color?
         demand = sum(
             getattr(c, game.cost_map[gem])
             for row in [1, 2, 3]
             for c in getattr(game.board, f"level{row}")
             if c
         )
-        score += demand * 0.2
+        score += demand * engine_multiplier * 0.2
 
+        # Noble pursuit
         for noble in game.board.nobles:
             required = getattr(noble, game.cost_map[gem], 0)
             if required <= 0 or player.cards.get(gem, 0) >= required:
@@ -48,16 +69,13 @@ def _card_value(card: Card, player: Player, game: SplendorGame) -> float:
                 for c in game.colors
             )
             urgency = max(0, 8 - remaining_total)  # closer to finishing = bigger bonus
-            score += 1.5 + urgency * 0.5
+            score += (1.5 + urgency * 0.5) * engine_multiplier
 
     return score
 
 
 def _find_denial_target(game: SplendorGame, bot: Player):
-    """Find a board card an opponent is one token away from (or already able
-    to) afford, so the bot can snatch or reserve it out from under them.
-    This is what makes the bot actually react to what you're doing instead
-    of playing in a vacuum."""
+    """Find a board card an opponent is close to affording so we can deny it."""
     opponents = [p for p in game.players if p.id != bot.id]
     if not opponents:
         return None
@@ -70,77 +88,31 @@ def _find_denial_target(game: SplendorGame, bot: Player):
                 continue
             for opp in opponents:
                 missing = sum(calculate_missing_tokens(card, opp, game).values())
-                if missing <= 1:
-                    danger = _card_value(card, opp, game) + (3 if missing == 0 else 0)
-                    if danger > best_danger:
+                gold_available = opp.tokens.get("gold", 0)
+                
+                # Check if they are 1 or 0 tokens away AFTER using their gold
+                if (missing - gold_available) <= 1:
+                    immediate_threat = 5 if (missing - gold_available) <= 0 else 0
+                    
+                    # Late game panic: if they can win by buying this, deny it at all costs
+                    win_threat = 200 if (opp.points + card.playerPoints >= 15) else 0
+                    
+                    danger = _card_value(card, opp, game) + immediate_threat + win_threat
+                    
+                    if danger > best_danger and danger > 10: # Only deny things actually worth denying
                         best_danger = danger
                         best = (row, i, card)
     return best
 
 
-def get_bot_move(game: SplendorGame, bot: Player) -> MovePayload:
-    # 1. Handle Game Sub-States (Mandatory actions)
-    if game.sub_state == "discarding":
-        excess = sum(bot.tokens.values()) - 10
-        discarded = []
-        temp_tokens = bot.tokens.copy()
-        for _ in range(excess):
-            # Prefer discarding tokens we have the most of, save gold for last
-            colors = [c for c in temp_tokens.keys() if temp_tokens[c] > 0 and c != "gold"]
-            if not colors: colors = ["gold"]
-            c = max(colors, key=lambda x: temp_tokens[x])
-            discarded.append(c)
-            temp_tokens[c] -= 1
-        return MovePayload(action="DISCARD_TOKENS", tokens=discarded)
-
-    if game.sub_state == "selecting_noble":
-        # All pending nobles are already earned -- just prefer the one with
-        # the steepest requirements as a (mostly cosmetic) tiebreak.
-        best_idx = max(
-            game.pending_nobles,
-            key=lambda idx: sum(getattr(game.board.nobles[idx], game.cost_map[c]) for c in game.colors)
-        )
-        return MovePayload(action="SELECT_NOBLE", nobleIndex=best_idx)
-
-    def can_afford(card):
-        return game._calculate_payment(bot, card) is not None
-
-    # 2. Try to buy a reserved card -- ranked by real value, not just raw points
-    buyable_reserved = [(i, c) for i, c in enumerate(bot.reserved) if can_afford(c)]
-    if buyable_reserved:
-        best_idx, _ = max(buyable_reserved, key=lambda x: _card_value(x[1], bot, game))
-        return MovePayload(action="BUY_RESERVED", cardIndex=best_idx)
-
-    # 3. Try to buy a card from the board -- same value ranking, with a big
-    #    bonus for grabbing something an opponent is about to take
-    buyable_board = []
-    for row in [3, 2, 1]:
-        for i, card in enumerate(getattr(game.board, f"level{row}")):
-            if card and can_afford(card):
-                buyable_board.append((row, i, card))
-
-    if buyable_board:
-        denial_target = _find_denial_target(game, bot)
-
-        def score(item):
-            row, i, card = item
-            val = _card_value(card, bot, game)
-            if denial_target and denial_target[0] == row and denial_target[1] == i:
-                val += 100  # steal it before they can
-            return val
-
-        best = max(buyable_board, key=score)
-        return MovePayload(action="BUY", row=best[0], cardIndex=best[1])
-
-    # 4. Figure out what tokens we need most, weighted by how valuable the
-    #    card is and how close we already are to affording it -- not just a
-    #    flat "1 point per missing token" like before
+def _calculate_color_needs(bot: Player, game: SplendorGame) -> dict:
+    """Figure out exactly which tokens the bot needs for cards on the board and in its hand."""
     color_needs = {c: 0.0 for c in game.colors}
 
     def _accumulate_needs(card):
         missing = calculate_missing_tokens(card, bot, game)
         missing_amount = sum(missing.values())
-        if 0 < missing_amount <= 4:
+        if 0 < missing_amount <= 5: # Look ahead to cards we are somewhat close to buying
             weight = _card_value(card, bot, game) / max(1, missing_amount)
             for color, amt in missing.items():
                 if color != "gold":
@@ -151,27 +123,91 @@ def get_bot_move(game: SplendorGame, bot: Player) -> MovePayload:
             if card: _accumulate_needs(card)
     for card in bot.reserved:
         _accumulate_needs(card)
+        
+    return color_needs
 
+
+def get_bot_move(game: SplendorGame, bot: Player) -> MovePayload:
+    color_needs = _calculate_color_needs(bot, game)
+
+    # 1. Handle Game Sub-States (Mandatory actions)
+    if game.sub_state == "discarding":
+        excess = sum(bot.tokens.values()) - 10
+        discarded = []
+        temp_tokens = bot.tokens.copy()
+        
+        for _ in range(excess):
+            # Smart discard: throw away the colors we need the LEAST based on current board state
+            colors_we_have = [c for c in temp_tokens.keys() if temp_tokens[c] > 0 and c != "gold"]
+            if not colors_we_have: 
+                colors_we_have = ["gold"]
+            
+            c = min(colors_we_have, key=lambda x: color_needs.get(x, 0))
+            discarded.append(c)
+            temp_tokens[c] -= 1
+            
+        return MovePayload(action="DISCARD_TOKENS", tokens=discarded)
+
+    if game.sub_state == "selecting_noble":
+        best_idx = max(
+            game.pending_nobles,
+            key=lambda idx: sum(getattr(game.board.nobles[idx], game.cost_map[c]) for c in game.colors)
+        )
+        return MovePayload(action="SELECT_NOBLE", nobleIndex=best_idx)
+
+    def can_afford(card):
+        return game._calculate_payment(bot, card) is not None
+
+    # 2. Try to buy a reserved card
+    buyable_reserved = [(i, c) for i, c in enumerate(bot.reserved) if can_afford(c)]
+    if buyable_reserved:
+        best_idx, _ = max(buyable_reserved, key=lambda x: _card_value(x[1], bot, game))
+        return MovePayload(action="BUY_RESERVED", cardIndex=best_idx)
+
+    # 3. Try to buy a card from the board
+    buyable_board = []
+    for row in [3, 2, 1]:
+        for i, card in enumerate(getattr(game.board, f"level{row}")):
+            if card and can_afford(card):
+                buyable_board.append((row, i, card))
+
+    denial_target = _find_denial_target(game, bot)
+
+    if buyable_board:
+        def score(item):
+            row, i, card = item
+            val = _card_value(card, bot, game)
+            if denial_target and denial_target[0] == row and denial_target[1] == i:
+                val += 500  # buy it before they can steal it
+            return val
+
+        best = max(buyable_board, key=score)
+        return MovePayload(action="BUY", row=best[0], cardIndex=best[1])
+
+    # 4. Take Tokens
     available_colors = [c for c in game.colors if game.board.tokens[c] > 0]
     available_colors.sort(key=lambda c: (color_needs.get(c, 0), random.random()), reverse=True)
 
-    # 5. Take Tokens (if we have space) -- double up on our single most-needed
-    #    color when it meaningfully advances our engine
+    # Double up if we need it
     if sum(bot.tokens.values()) < 8:
         for c in available_colors:
             if color_needs.get(c, 0) > 0 and game.board.tokens[c] >= 4:
                 return MovePayload(action="TAKE_TOKENS", tokens=[c, c])
 
     required_amount = min(3, len(available_colors))
-    # Prefer taking tokens only if it won't force us to discard
     if required_amount > 0 and sum(bot.tokens.values()) + required_amount <= 10:
-        return MovePayload(action="TAKE_TOKENS", tokens=available_colors[:required_amount])
+        needed_colors = [c for c in available_colors if color_needs.get(c, 0) > 0.1]
+        
+        # Only take 3 if we actually want them, or if we are just fetching the top available ones
+        if len(needed_colors) >= 3:
+            return MovePayload(action="TAKE_TOKENS", tokens=needed_colors[:3])
+        elif len(available_colors) >= 3:
+            return MovePayload(action="TAKE_TOKENS", tokens=available_colors[:3])
+        else:
+            return MovePayload(action="TAKE_TOKENS", tokens=available_colors[:required_amount])
 
-    # 6. Fallback: Reserve strategically -- deny the opponent's biggest
-    #    threat if one exists, otherwise grab the most valuable reservable
-    #    card instead of picking at random
+    # 5. Fallback: Reserve strategically
     if len(bot.reserved) < 3:
-        denial_target = _find_denial_target(game, bot)
         if denial_target:
             row, idx, _ = denial_target
             return MovePayload(action="RESERVE", row=row, cardIndex=idx)
@@ -182,16 +218,17 @@ def get_bot_move(game: SplendorGame, bot: Player) -> MovePayload:
                 if card: reservable.append((row, i, card))
 
         if reservable:
-            best = max(reservable, key=lambda x: _card_value(x[2], bot, game))
+            # Add a slight randomized noise so multiple bots don't exactly mimic each other
+            best = max(reservable, key=lambda x: _card_value(x[2], bot, game) + random.uniform(0, 2))
             return MovePayload(action="RESERVE", row=best[0], cardIndex=best[1])
 
         row = random.choice([1, 2, 3])
         if game.decks[row]:
             return MovePayload(action="RESERVE", row=row, cardIndex="deck")
 
-    # 7. Absolute Fallback: Take tokens anyway (will force a discard next loop)
+    # 6. Absolute Fallback: Take tokens anyway (will force a discard next loop)
     if required_amount > 0:
         return MovePayload(action="TAKE_TOKENS", tokens=available_colors[:required_amount])
 
-    # 8. Complete stalemate safety
+    # 7. Complete stalemate safety
     return MovePayload(action="SKIP")

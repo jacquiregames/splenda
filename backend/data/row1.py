@@ -9,7 +9,7 @@ row1 = [
     "costRed": 0,
     "costBrown": 0,
     "cardRow": 1,
-    "FileName": "images/row1/001.jpg"
+    "FileName": "images/row1/001.png"
   },
   {
     "gemColor": "Blue",
@@ -20,7 +20,7 @@ row1 = [
     "costRed": 4,
     "costBrown": 0,
     "cardRow": 1,
-    "FileName": "images/row1/002.jpg"
+    "FileName": "images/row1/002.png"
   },
   {
     "gemColor": "Green",
@@ -31,7 +31,7 @@ row1 = [
     "costRed": 0,
     "costBrown": 4,
     "cardRow": 1,
-    "FileName": "images/row1/003.jpg"
+    "FileName": "images/row1/003.png"
   },
   {
     "gemColor": "Red",
@@ -42,7 +42,7 @@ row1 = [
     "costRed": 0,
     "costBrown": 0,
     "cardRow": 1,
-    "FileName": "images/row1/004.jpg"
+    "FileName": "images/row1/004.png"
   },
   {
     "gemColor": "Brown",
@@ -53,7 +53,7 @@ row1 = [
     "costRed": 0,
     "costBrown": 0,
     "cardRow": 1,
-    "FileName": "images/row1/005.jpg"
+    "FileName": "images/row1/005.png"
   },
   {
     "gemColor": "White",
@@ -64,7 +64,7 @@ row1 = [
     "costRed": 0,
     "costBrown": 1,
     "cardRow": 1,
-    "FileName": "images/row1/006.jpg"
+    "FileName": "images/row1/006.png"
   },
   {
     "gemColor": "Blue",
@@ -75,7 +75,7 @@ row1 = [
     "costRed": 1,
     "costBrown": 0,
     "cardRow": 1,
-    "FileName": "images/row1/007.jpg"
+    "FileName": "images/row1/007.png"
   },
   {
     "gemColor": "Green",
@@ -86,7 +86,7 @@ row1 = [
     "costRed": 0,
     "costBrown": 0,
     "cardRow": 1,
-    "FileName": "images/row1/008.jpg"
+    "FileName": "images/row1/008.png"
   },
   {
     "gemColor": "Red",
@@ -97,7 +97,7 @@ row1 = [
     "costRed": 1,
     "costBrown": 3,
     "cardRow": 1,
-    "FileName": "images/row1/009.jpg"
+    "FileName": "images/row1/009.png"
   },
   {
     "gemColor": "Brown",
@@ -108,7 +108,7 @@ row1 = [
     "costRed": 3,
     "costBrown": 1,
     "cardRow": 1,
-    "FileName": "images/row1/010.jpg"
+    "FileName": "images/row1/010.png"
   },
   {
     "gemColor": "White",
@@ -119,7 +119,7 @@ row1 = [
     "costRed": 0,
     "costBrown": 0,
     "cardRow": 1,
-    "FileName": "images/row1/011.jpg"
+    "FileName": "images/row1/011.png"
   },
   {
     "gemColor": "Blue",
@@ -130,7 +130,7 @@ row1 = [
     "costRed": 0,
     "costBrown": 3,
     "cardRow": 1,
-    "FileName": "images/row1/012.jpg"
+    "FileName": "images/row1/012.png"
   },
   {
     "gemColor": "Green",
@@ -141,7 +141,7 @@ row1 = [
     "costRed": 3,
     "costBrown": 0,
     "cardRow": 1,
-    "FileName": "images/row1/013.jpg"
+    "FileName": "images/row1/013.png"
   },
   {
     "gemColor": "Red",
@@ -152,7 +152,7 @@ row1 = [
     "costRed": 0,
     "costBrown": 0,
     "cardRow": 1,
-    "FileName": "images/row1/014.jpg"
+    "FileName": "images/row1/014.png"
   },
   {
     "gemColor": "Brown",
@@ -163,7 +163,7 @@ row1 = [
     "costRed": 0,
     "costBrown": 0,
     "cardRow": 1,
-    "FileName": "images/row1/015.jpg"
+    "FileName": "images/row1/015.png"
   },
   {
     "gemColor": "White",
@@ -174,7 +174,7 @@ row1 = [
     "costRed": 0,
     "costBrown": 1,
     "cardRow": 1,
-    "FileName": "images/row1/016.jpg"
+    "FileName": "images/row1/016.png"
   },
   {
     "gemColor": "Blue",
@@ -185,7 +185,7 @@ row1 = [
     "costRed": 2,
     "costBrown": 0,
     "cardRow": 1,
-    "FileName": "images/row1/017.jpg"
+    "FileName": "images/row1/017.png"
   },
   {
     "gemColor": "Green",
@@ -196,7 +196,7 @@ row1 = [
     "costRed": 2,
     "costBrown": 2,
     "cardRow": 1,
-    "FileName": "images/row1/018.jpg"
+    "FileName": "images/row1/018.png"
   },
   {
     "gemColor": "Red",
@@ -207,7 +207,7 @@ row1 = [
     "costRed": 0,
     "costBrown": 2,
     "cardRow": 1,
-    "FileName": "images/row1/019.jpg"
+    "FileName": "images/row1/019.png"
   },
   {
     "gemColor": "Brown",
@@ -218,7 +218,7 @@ row1 = [
     "costRed": 1,
     "costBrown": 0,
     "cardRow": 1,
-    "FileName": "images/row1/020.jpg"
+    "FileName": "images/row1/020.png"
   },
   {
     "gemColor": "White",
@@ -229,7 +229,7 @@ row1 = [
     "costRed": 0,
     "costBrown": 2,
     "cardRow": 1,
-    "FileName": "images/row1/021.jpg"
+    "FileName": "images/row1/021.png"
   },
   {
     "gemColor": "Blue",
@@ -240,7 +240,7 @@ row1 = [
     "costRed": 0,
     "costBrown": 2,
     "cardRow": 1,
-    "FileName": "images/row1/022.jpg"
+    "FileName": "images/row1/022.png"
   },
   {
     "gemColor": "Green",
@@ -251,7 +251,7 @@ row1 = [
     "costRed": 2,
     "costBrown": 0,
     "cardRow": 1,
-    "FileName": "images/row1/023.jpg"
+    "FileName": "images/row1/023.png"
   },
   {
     "gemColor": "Red",
@@ -262,7 +262,7 @@ row1 = [
     "costRed": 2,
     "costBrown": 0,
     "cardRow": 1,
-    "FileName": "images/row1/024.jpg"
+    "FileName": "images/row1/024.png"
   },
   {
     "gemColor": "Brown",
@@ -273,7 +273,7 @@ row1 = [
     "costRed": 0,
     "costBrown": 0,
     "cardRow": 1,
-    "FileName": "images/row1/025.jpg"
+    "FileName": "images/row1/025.png"
   },
   {
     "gemColor": "White",
@@ -284,7 +284,7 @@ row1 = [
     "costRed": 1,
     "costBrown": 1,
     "cardRow": 1,
-    "FileName": "images/row1/026.jpg"
+    "FileName": "images/row1/026.png"
   },
   {
     "gemColor": "Blue",
@@ -295,7 +295,7 @@ row1 = [
     "costRed": 2,
     "costBrown": 1,
     "cardRow": 1,
-    "FileName": "images/row1/027.jpg"
+    "FileName": "images/row1/027.png"
   },
   {
     "gemColor": "Green",
@@ -306,7 +306,7 @@ row1 = [
     "costRed": 1,
     "costBrown": 2,
     "cardRow": 1,
-    "FileName": "images/row1/028.jpg"
+    "FileName": "images/row1/028.png"
   },
   {
     "gemColor": "Red",
@@ -317,7 +317,7 @@ row1 = [
     "costRed": 0,
     "costBrown": 1,
     "cardRow": 1,
-    "FileName": "images/row1/029.jpg"
+    "FileName": "images/row1/029.png"
   },
   {
     "gemColor": "Brown",
@@ -328,7 +328,7 @@ row1 = [
     "costRed": 1,
     "costBrown": 0,
     "cardRow": 1,
-    "FileName": "images/row1/030.jpg"
+    "FileName": "images/row1/030.png"
   },
   {
     "gemColor": "White",
@@ -339,7 +339,7 @@ row1 = [
     "costRed": 2,
     "costBrown": 1,
     "cardRow": 1,
-    "FileName": "images/row1/031.jpg"
+    "FileName": "images/row1/031.png"
   },
   {
     "gemColor": "Blue",
@@ -350,7 +350,7 @@ row1 = [
     "costRed": 0,
     "costBrown": 2,
     "cardRow": 1,
-    "FileName": "images/row1/032.jpg"
+    "FileName": "images/row1/032.png"
   },
   {
     "gemColor": "Green",
@@ -361,7 +361,7 @@ row1 = [
     "costRed": 0,
     "costBrown": 0,
     "cardRow": 1,
-    "FileName": "images/row1/033.jpg"
+    "FileName": "images/row1/033.png"
   },
   {
     "gemColor": "Red",
@@ -372,7 +372,7 @@ row1 = [
     "costRed": 0,
     "costBrown": 0,
     "cardRow": 1,
-    "FileName": "images/row1/034.jpg"
+    "FileName": "images/row1/034.png"
   },
   {
     "gemColor": "Brown",
@@ -383,7 +383,7 @@ row1 = [
     "costRed": 1,
     "costBrown": 0,
     "cardRow": 1,
-    "FileName": "images/row1/035.jpg"
+    "FileName": "images/row1/035.png"
   },
   {
     "gemColor": "White",
@@ -394,7 +394,7 @@ row1 = [
     "costRed": 1,
     "costBrown": 1,
     "cardRow": 1,
-    "FileName": "images/row1/036.jpg"
+    "FileName": "images/row1/036.png"
   },
   {
     "gemColor": "Blue",
@@ -405,7 +405,7 @@ row1 = [
     "costRed": 1,
     "costBrown": 1,
     "cardRow": 1,
-    "FileName": "images/row1/037.jpg"
+    "FileName": "images/row1/037.png"
   },
   {
     "gemColor": "Green",
@@ -416,7 +416,7 @@ row1 = [
     "costRed": 1,
     "costBrown": 1,
     "cardRow": 1,
-    "FileName": "images/row1/038.jpg"
+    "FileName": "images/row1/038.png"
   },
   {
     "gemColor": "Red",
@@ -427,7 +427,7 @@ row1 = [
     "costRed": 0,
     "costBrown": 1,
     "cardRow": 1,
-    "FileName": "images/row1/039.jpg"
+    "FileName": "images/row1/039.png"
   },
   {
     "gemColor": "Brown",
@@ -438,6 +438,6 @@ row1 = [
     "costRed": 1,
     "costBrown": 0,
     "cardRow": 1,
-    "FileName": "images/row1/040.jpg"
+    "FileName": "images/row1/040.png"
   }
 ]
