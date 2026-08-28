@@ -62,12 +62,12 @@
 
 .color-swatch {
   width: 50px;
-  height: 30px;
+  height: 40px;
   cursor: pointer;
   border: 2px solid transparent;
   transition: transform 0.2s, border-color 0.2s, box-shadow 0.2s;
   box-shadow: 0 4px 6px rgba(0,0,0,0.5);
-  object-fit: cover;
+  object-fit: 100% 100%;
 }
 
 .color-swatch:hover {
@@ -90,7 +90,7 @@
 
 .mini-lobby-swatch {
   width: 14px;
-  height: 14px;
+  height: 18px;
   border-radius: 50%;
   box-shadow: 0 2px 4px rgba(0,0,0,0.5);
 }
@@ -225,22 +225,29 @@
 .p-tag { font-size: 0.8rem; color: var(--color-text-muted); margin-left: 10px; }
 .host-tag { background: var(--color-gold); color: black; padding: 2px 6px; border-radius: 4px; font-size: 0.7rem; font-weight: bold; }
 
-/* --- START BUTTON --- */
-.start-btn {
-  /* Overrides a gradient background inherited from a shared button style */
+/* --- IMAGE BUTTONS (START / ADD BOT) --- */
+.start-btn,
+.add-bot-btn {
   background: transparent !important;
   margin-top: 15px !important;
   margin-bottom: 12px;
-  height: 60px !important; /* Approx old button height */
+  height: 60px !important;
   width: 100%;
 }
 
-.start-btn:hover {
+.add-bot-btn {
+  margin-top: 10px !important;
+  margin-bottom: 0px;
+}
+
+.start-btn:hover,
+.add-bot-btn:hover {
   transform: scale(1.05);
   background: transparent !important;
 }
 
-.start-btn.disabled {
+.start-btn.disabled,
+.add-bot-btn:disabled {
   filter: grayscale(100%);
   opacity: 0.5;
   cursor: not-allowed;
