@@ -1,0 +1,101 @@
+/* src/styles/ThemeToggle.css */
+.theme-toggle-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 15px; /* Added gap between the two switches */
+  margin-top: 15px;
+}
+
+.theme-switch {
+  position: relative;
+  display: inline-block;
+  width: 64px; /* Wide enough to fit the sun/moon icons */
+  height: 34px;
+}
+
+.theme-switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.slider {
+  position: absolute;
+  cursor: pointer;
+  inset: 0;
+  background-color: var(--color-bg-dark); /* Darker track for contrast */
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  transition: 0.4s;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 5px;
+}
+
+/* The Knob */
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 26px;
+  width: 26px;
+  left: 4px;
+  bottom: 3px; /* Adjusted for the track border */
+  background-color: var(--color-text-light);
+  transition: 0.4s;
+  z-index: 2; /* Sits above the icons */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
+}
+
+input:checked + .slider {
+  background-color: var(--color-info-blue); /* Blue track for Light/Active */
+}
+
+input:focus + .slider {
+  box-shadow: 0 0 1px var(--color-info-blue);
+}
+
+input:checked + .slider:before {
+  transform: translateX(30px); /* Distance matched to the wider track */
+}
+
+.slider.round {
+  border-radius: 34px;
+}
+
+.slider.round:before {
+  border-radius: 50%;
+}
+
+/* --- ICONS --- */
+.toggle-icon {
+  font-size: 16px;
+  line-height: 1;
+  z-index: 1; /* Sits below the knob */
+  user-select: none;
+}
+
+.moon {
+  margin-left: 2px;
+}
+
+.sun {
+  margin-right: 2px;
+}
+
+/* Swatch Image Icons for the new toggle */
+.grey-swatch-icon {
+  position: absolute;
+  left: 5px;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+}
+
+.color-swatch-icon {
+  position: absolute;
+  right: 5px;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+}
