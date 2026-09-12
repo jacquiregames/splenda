@@ -8,9 +8,13 @@ on:
 jobs:
   build-windows:
     runs-on: windows-latest
-    steps:
-      - name: Checkout Code
+    steps: 
+-       name: Checkout Code
         uses: actions/checkout@v5
+        with:
+          clean: true
+          fetch-depth: 0
+
 
       - name: Setup Node.js
         uses: actions/setup-node@v6
