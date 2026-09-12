@@ -2,12 +2,14 @@
 from fastapi import FastAPI, WebSocket, WebSocketDisconnect
 from fastapi.staticfiles import StaticFiles
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import FileResponse
 from dotenv import load_dotenv
 from pydantic import ValidationError
 import json
 import logging
 import asyncio
 import os
+import sys
 
 from bot import get_bot_move
 from game import SplendorGame
@@ -23,9 +25,16 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# Dynamically locate the "public" folder regardless of where the script is run from
-BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-PUBLIC_DIR = os.path.join(os.path.dirname(BASE_DIR), "public")
+def get_base_path():
+    """Get absolute path to resource, works for dev and for PyInstaller"""
+    if getattr(sys, 'frozen', False):
+        return sys._MEIPASS
+    return os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+
+BASE_DIR = get_base_path()
+PUBLIC_DIR = os.path.join(BASE_DIR, "public")
+DIST_DIR = os.path.join(BASE_DIR, "dist")
+
 app.mount("/static", StaticFiles(directory=PUBLIC_DIR), name="static")
 
 game = SplendorGame()
@@ -38,6 +47,18 @@ class ConnectionManager:
 
     async def connect(self, websocket: WebSocket, client_id: str):
         await websocket.accept()
+        
+        # Prune old connections belonging to the same client_id
+        old_websockets = [ws for ws, cid in self.active_connections.items() if cid == client_id]
+        for ws in old_websockets:
+            try:
+                # Close the old connection explicitly
+                await ws.close(code=1008, reason="Reconnected from another tab/window")
+            except Exception:
+                pass
+            del self.active_connections[ws]
+            
+        # Register the new websocket
         self.active_connections[websocket] = client_id
 
     def disconnect(self, websocket: WebSocket):
@@ -127,6 +148,17 @@ async def websocket_endpoint(websocket: WebSocket, client_id: str, color: str = 
                 
     except WebSocketDisconnect:
         manager.disconnect(websocket)
+ 
+if os.path.exists(DIST_DIR):
+    app.mount("/assets", StaticFiles(directory=os.path.join(DIST_DIR, "assets")), name="assets")
+
+    @app.get("/{catchall:path}")
+    async def serve_frontend(catchall: str): 
+        file_path = os.path.join(DIST_DIR, catchall)
+        if os.path.isfile(file_path):
+            return FileResponse(file_path) 
+        return FileResponse(os.path.join(DIST_DIR, "index.html"))
+
 
 if __name__ == "__main__":
     import uvicorn
