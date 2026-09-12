@@ -56,7 +56,7 @@ export const Board: React.FC<BoardProps> = ({
                         {!isDeckEmpty ? (
                             <img 
                                 id={`deck-back-${lvl}`}
-                                src={getAssetUrl(`images/row${lvl}back.png`, 'card')} 
+                                src={getAssetUrl(`images/row${lvl}back.webp`, 'card')} 
                                 className={`card deck-back ${isMyTurn && myReservedCount < 3 ? 'affordable' : ''}`}
                                 alt={`Level ${lvl} Deck`}
                                 onClick={() => isMyTurn && myReservedCount < 3 && onReserve(lvl, "deck")}

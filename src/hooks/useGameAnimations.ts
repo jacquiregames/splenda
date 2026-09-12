@@ -10,7 +10,6 @@ export const useGameAnimations = () => {
     const [animations, setAnimations] = useState<AnimationRequest[]>([]);
     const animationEndTime = useRef<number>(0);
 
-    // FIX (Bug 2): Added `playerId` as the 8th parameter to match all call sites in App.tsx
     const triggerAnimation = (
         src: string,
         startEl: HTMLElement | null,
@@ -45,7 +44,7 @@ export const useGameAnimations = () => {
                 end: endRect,
                 flip,
                 type,
-                playerId  // FIX (Bug 2): Now actually stored on the animation object
+                playerId 
             };
 
             setTimeout(() => {
@@ -77,7 +76,7 @@ export const useOpponentMoveAnimator = (
         backSrc?: string,
         flip?: boolean | 'half',
         type?: 'token' | 'card',
-        playerId?: string  // FIX (Bug 3): Typed properly instead of `any`
+        playerId?: string
     ) => void,
     executeWithFocus: (playerId: string, cb: () => void) => void
 ) => {
@@ -113,7 +112,10 @@ export const useOpponentMoveAnimator = (
                 });
             } 
             else if (move.type === 'BUY' && move.card_filename) {
-                const startEl = document.querySelector('.board-area') as HTMLElement; 
+                // FIX: Grab a proper card element so the aspect ratio evaluates correctly
+                let startEl = document.querySelector('.deck-back') as HTMLElement;
+                if (!startEl) startEl = document.querySelector('.card') as HTMLElement;
+
                 const cardFile = move.card_filename;
                 
                 const opp = gameState.players.find(p => p.id === oppId);
@@ -128,7 +130,13 @@ export const useOpponentMoveAnimator = (
                 triggerAnimation(getAssetUrl(cardFile, 'card'), startEl, endTargets, 0, undefined, false, 'card', oppId);
             }
             else if (move.type === 'RESERVE') {
-                const startEl = document.querySelector('.board-area') as HTMLElement;
+                const row = (move as any).row || 2; 
+
+                // FIX: Target the actual deck for this row so the flying element starts card-sized
+                let startEl = document.getElementById(`deck-back-${row}`) as HTMLElement;
+                if (!startEl) startEl = document.querySelector('.deck-back') as HTMLElement;
+                if (!startEl) startEl = document.querySelector('.card') as HTMLElement;
+
                 const opp = gameState.players.find(p => p.id === oppId);
                 const nextSlot = opp?.reserved ? Math.max(0, opp.reserved.length - 1) : 0;
                 
@@ -137,15 +145,12 @@ export const useOpponentMoveAnimator = (
                     `reserved-card-${oppId}-${nextSlot}`
                 ];
 
-                // --- FIX: Read the exact row from the payload ---
-                const row = (move as any).row || 2; 
-
                 triggerAnimation(
-                    getAssetUrl(`images/row${row}back.png`, 'card'),
+                    getAssetUrl(`images/row${row}back.webp`, 'card'),
                     startEl,
                     endTargets,
                     0,
-                    getAssetUrl(`images/row${row}back.png`, 'card'),
+                    getAssetUrl(`images/row${row}back.webp`, 'card'),
                     true,
                     'card',
                     oppId
@@ -157,7 +162,6 @@ export const useOpponentMoveAnimator = (
                     triggerAnimation(getAssetUrl('gold', 'token'), goldStart, goldEnd, 200, undefined, false, 'token', oppId);
                 }
             }
-            // --- NEW: Catch opponent discards and animate them! ---
             else if (move.type === 'DISCARD_TOKENS' && move.tokens) {
                 move.tokens.forEach((color: string, i: number) => {
                     const startEl = document.getElementById(`player-token-${oppId}-${color}`);
@@ -168,4 +172,4 @@ export const useOpponentMoveAnimator = (
         });
 
     }, [gameState?.last_move, playerName, triggerAnimation, executeWithFocus, gameState?.players]);
-}; 
+};

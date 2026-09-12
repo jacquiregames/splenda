@@ -18,32 +18,45 @@
 }
 
 .login-box {
-  width: 400px;
+  width: 26vw;
+  position: relative;
+  overflow: hidden;
+  background: var(--overlay-light-panel);
+  border-radius: 15px;
+  box-shadow: var(--shadow-panel);
+  z-index: var(--z-base);
+  /* Layout is now delegated to the absolute/relative child panels */
+}
+
+/* We use a wrapper system to crossfade the two modes smoothly */
+.transition-panel {
   display: flex;
   flex-direction: column;
   align-items: stretch;
   gap: 15px;
-  position: relative;
-  overflow: hidden;
-  background: var(--overlay-light-panel);
   padding: 40px;
-  border-radius: 15px;
-  box-shadow: var(--shadow-panel);
-  z-index: var(--z-base);
-  transition: height 0.3s ease;
+  box-sizing: border-box;
+  width: 100%;
 }
 
-/* Updated login height to automatically fit the new color picker */
-.login-box.mode-login {
-  height: auto;
-  min-height: 250px; 
-  justify-content: center;
+.panel-active {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+  transform: scale(1);
+  position: relative;
+  transition: opacity 0.4s ease 0.1s, transform 0.4s ease 0.1s;
 }
 
-.login-box.mode-lobby {
-  height: auto;
-  min-height: 200px;
-  justify-content: flex-start;
+.panel-hidden {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transform: scale(0.95); /* Slight push-back effect during fade */
+  position: absolute;
+  top: 0;
+  left: 0;
+  transition: opacity 0.3s ease, transform 0.3s ease, visibility 0s 0.3s;
 }
 
 /* --- NEW: Color Chooser Styles --- */
@@ -99,7 +112,7 @@
   content: "";
   position: absolute;
   inset: 0;
-  background-image: url('/images/login.png');
+  background-image: url('/images/lobby/login.webp');
   background-size: 100% 100%;
   background-position: center;
   background-repeat: no-repeat;

@@ -15,12 +15,12 @@ export const YourTurnAnimation: React.FC<YourTurnAnimationProps> = ({ isMyTurn }
     return (
         <div className="your-turn-animation-container">
             <img 
-                src="/images/yourturn_left.webp" 
+                src="/images/yourturn/yourturn_left.webp" 
                 alt="Your Turn" 
                 className="your-turn-image left-image" 
             />
             <img 
-                src="/images/yourturn_right.webp" 
+                src="/images/yourturn/yourturn_right.webp" 
                 alt="Your Turn" 
                 className="your-turn-image right-image" 
             />

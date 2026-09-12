@@ -20,7 +20,7 @@ export const useSplendorSocket = (
         let reconnectTimer: ReturnType<typeof setTimeout>;
 
         const connect = () => {
-            ws.current = new WebSocket(`${SERVER_URL}/${playerName}?color=${playerColor}`);
+            ws.current = new WebSocket(`${SERVER_URL}/${encodeURIComponent(playerName)}?color=${encodeURIComponent(playerColor)}`);
 
             ws.current.onmessage = (event) => {
                 const parsedState = JSON.parse(event.data);

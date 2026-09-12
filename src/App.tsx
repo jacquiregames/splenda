@@ -38,8 +38,8 @@ const StartVideoPlayer: React.FC<{ onEnded: () => void }> = ({ onEnded }) => {
         <div className="game-container">
             <video
                 ref={videoRef}
-                src="/images/start.mp4"
-                poster="/images/background.png"
+                src="/videos/start.mp4"
+                poster="/images/backgrounds/background.webp"
                 playsInline
                 onEnded={onEnded}
                 onError={onEnded}
@@ -96,9 +96,9 @@ function App() {
           colorsToLoad.forEach(c => {
               if (c) {
                   specificAssets.push(
-                      `${IMAGE_BASE_URL}/images/backgrounds/${mode}1${c}.png`,
-                      `${IMAGE_BASE_URL}/images/backgrounds/${mode}2${c}.png`,
-                      `${IMAGE_BASE_URL}/images/backgrounds/${mode}3${c}.png`
+                      `${IMAGE_BASE_URL}/images/backgrounds/${mode}1${c}.webp`,
+                      `${IMAGE_BASE_URL}/images/backgrounds/${mode}2${c}.webp`,
+                      `${IMAGE_BASE_URL}/images/backgrounds/${mode}3${c}.webp`
                   );
               }
           });
@@ -128,7 +128,8 @@ function App() {
 
   if (gameState?.status === 'active' && !gameAssetsLoaded) return <LoadingScreen />;
 
-  if (!isConnected || (gameState && gameState.status === 'lobby')) {
+
+  if (!isConnected || !gameState || gameState.status === 'lobby') {
       return (
           <>
               <ToastContainer theme="dark" />
@@ -147,8 +148,6 @@ function App() {
           </>
       );
   }
-
-  if (!gameState) return <div className="loading">Connecting...</div>; 
 
   return (
     <>

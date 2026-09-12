@@ -8,17 +8,16 @@ export const IMAGE_BASE_URL = `${API_URL}/static`;
 
 export const COLORS = ["white", "blue", "green", "red", "brown"];
 
-export const getAssetUrl = (path: string, type: 'token' | 'card') => {
-  const style = 'new'; // Hardcoded to the Splenda deck
+export const getAssetUrl = (path: string, type: 'token' | 'card') => { 
 
   if (type === 'token') {
       const c = path.charAt(0).toUpperCase() + path.slice(1);
-      return `${IMAGE_BASE_URL}/images/${style}/tokens/${c}Token.png`;
+      return `${IMAGE_BASE_URL}/images/tokens/${c}Token.webp`;
   } 
   
   if (path.includes('back')) {
       const filename = path.split('/').pop();
-      return `${IMAGE_BASE_URL}/images/${style}/${filename}`;
+      return `${IMAGE_BASE_URL}/images/${filename}`;
   }
 
   const parts = path.split('/'); 
@@ -27,5 +26,5 @@ export const getAssetUrl = (path: string, type: 'token' | 'card') => {
   const folder = parts[1];
   const filename = parts[2];
   
-  return `${IMAGE_BASE_URL}/images/${style}/${folder}/${filename}`;
+  return `${IMAGE_BASE_URL}/images/${folder}/${filename}`;
 };

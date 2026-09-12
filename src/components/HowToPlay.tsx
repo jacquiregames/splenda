@@ -45,18 +45,18 @@ export const HowToPlay: React.FC<HowToPlayProps> = ({ onClose }) => {
                     {/* Right Column: Vertical Image */}
                     <div className="how-to-play-image-container">
                         <img 
-                            src="/images/tokens.png" 
+                            src="/images/lobby/tokens.webp" 
                             alt="Splendor Tokens" 
                             className="how-to-play-tokens-img" 
                         />
                         <div className="how-to-play-cards-column">
                             <img 
-                                src="/images/ex1.webp" 
+                                src="/images/lobby/ex1.webp" 
                                 alt="Example Noble" 
                                 className="how-to-play-card-img game-example" 
                             />
                             <img 
-                                src="/images/ex2.webp" 
+                                src="/images/lobby/ex2.webp" 
                                 alt="Example Card" 
                                 className="how-to-play-card-img game-example" 
                             />

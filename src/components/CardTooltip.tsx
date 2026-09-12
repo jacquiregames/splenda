@@ -39,7 +39,7 @@ export const CardTooltip: React.FC<CardTooltipProps> = ({ card, players, myId })
 
     if (!me) return null;
 
-    const renderDeficit = (player: Player, isMe: boolean) => {
+    const renderDeficit = (player: Player) => {
         const { missing, stillNeeded, goldUsed } = calculateDeficit(player, card);
 
         if (stillNeeded === 0) {
@@ -69,7 +69,8 @@ export const CardTooltip: React.FC<CardTooltipProps> = ({ card, players, myId })
         <div className="card-tooltip">
             <div className="tooltip-section user-section">
                 <div className="tooltip-player-name">You:</div>
-                {renderDeficit(me, true)}
+                {/* Fixed: removed the unused second argument (true) */}
+                {renderDeficit(me)}
             </div>
             
             {opponents.length > 0 && (
@@ -77,7 +78,8 @@ export const CardTooltip: React.FC<CardTooltipProps> = ({ card, players, myId })
                     {opponents.map(opp => (
                         <div key={opp.id} className="opponent-deficit-row">
                             <div className="tooltip-player-name">{opp.id}:</div>
-                            {renderDeficit(opp, false)}
+                            {/* Fixed: removed the unused second argument (false) */}
+                            {renderDeficit(opp)}
                         </div>
                     ))}
                 </div>

@@ -27,7 +27,7 @@ const ColorPicker = ({ selected, onSelect, used = [] }: { selected: string, onSe
                 return (
                     <img
                         key={color}
-                        src={`/images/playercolors/${color}.png`}
+                        src={`/images/playercolors/${color}.webp`}
                         className={`color-swatch ${selected === color ? 'selected' : ''} ${isUsed ? 'dimmed' : ''}`}
                         onClick={() => !isUsed && onSelect(color)}
                         alt={color}
@@ -52,83 +52,81 @@ export const Lobby: React.FC<LobbyProps> = ({
     return (
         <div className="game-container login-container">
             <button className="how-to-play-btn lobby-htp-btn" onClick={onOpenHowToPlay}>
-                <img src="/images/howtoplay.png" alt="How to Play" />
+                <img src="/images/buttons/howtoplay.webp" alt="How to Play" />
             </button>
             <FireworksLayer intensity="low" />
-            <img src="/images/logo.png" alt="SPLENDA" className="login-logo" /> 
+            <img src="/images/lobby/logo.webp" alt="SPLENDA" className="login-logo" /> 
             
             <div className={`login-box ${isConnected ? 'mode-lobby' : 'mode-login'}`}>
-                {!isConnected ? (
-                    // --- STATE 1: LOGIN (Free Pick) ---
-                    <>
-                        <input 
-                            type="text" 
-                            placeholder="Enter your name" 
-                            value={playerName}
-                            onChange={(e) => setPlayerName(e.target.value)}
-                            onKeyDown={(e) => e.key === 'Enter' && playerName && joinGame()}
-                            maxLength={12}
-                            autoFocus
-                        />
-                        <ColorPicker selected={playerColor} onSelect={setPlayerColor} used={[]} />
-                        <button disabled={!playerName} onClick={joinGame} className="img-action-btn join-btn">
-                            <img src="/images/joingame.png" alt="Join Game" />
-                        </button>
-                    </>
-                ) : (
-                    // --- STATE 2: LOBBY LIST (Live Sync) ---
-                    <>
-                        <h3 className="lobby-header">Players Joined ({players.length}/4)</h3>
-                        
-                        <ul className="lobby-list">
-                            {players.map(p => (
-                                <li key={p.id} className="lobby-player">
-                                    <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                                        <img src={`/images/playercolors/${p.color}.png`} className="mini-lobby-swatch" alt="" />
-                                        <span className="p-name">{p.id}</span>
-                                        {p.id === playerName && <span className="p-tag">(You)</span>}
-                                        {p.is_bot && <span className="p-tag">(Bot)</span>}
-                                    </div>
-                                    {players[0].id === p.id && <span className="host-tag">HOST</span>}
-                                </li>
-                            ))}
-                        </ul>
+                {/* --- STATE 1: LOGIN (Free Pick) --- */}
+                <div className={`transition-panel ${!isConnected ? 'panel-active' : 'panel-hidden'}`}>
+                    <input 
+                        type="text" 
+                        placeholder="Enter your name" 
+                        value={playerName}
+                        onChange={(e) => setPlayerName(e.target.value)}
+                        onKeyDown={(e) => e.key === 'Enter' && playerName && joinGame()}
+                        maxLength={12}
+                        autoFocus
+                    />
+                    <ColorPicker selected={playerColor} onSelect={setPlayerColor} used={[]} />
+                    <button disabled={!playerName} onClick={joinGame} className="img-action-btn join-btn">
+                        <img src="/images/buttons/joingame.webp" alt="Join Game" />
+                    </button>
+                </div>
 
-                        {/* Allow player to change color while in lobby, blocking taken ones */}
-                        <ColorPicker 
-                            selected={myBackendColor} 
-                            onSelect={(c) => sendMove && sendMove('SET_COLOR', { color: c })} 
-                            used={usedColors} 
-                        />
+                {/* --- STATE 2: LOBBY LIST (Live Sync) --- */}
+                <div className={`transition-panel ${isConnected ? 'panel-active' : 'panel-hidden'}`}>
+                    <h3 className="lobby-header">Players Joined ({players.length}/4)</h3>
+                    
+                    <ul className="lobby-list">
+                        {players.map(p => (
+                            <li key={p.id} className="lobby-player">
+                                <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                                    <img src={`/images/playercolors/${p.color}.webp`} className="mini-lobby-swatch" alt="" />
+                                    <span className="p-name">{p.id}</span>
+                                    {p.id === playerName && <span className="p-tag">(You)</span>}
+                                    {p.is_bot && <span className="p-tag">(Bot)</span>}
+                                </div>
+                                {players[0].id === p.id && <span className="host-tag">HOST</span>}
+                            </li>
+                        ))}
+                    </ul>
 
-                        {isHost ? (
-                            <div className="host-controls"> 
-                                <button 
-                                    className="add-bot-btn img-action-btn" 
-                                    onClick={() => sendMove && sendMove("ADD_BOT")}
-                                    disabled={players.length >= 4}
-                                >
-                                    <img src="/images/addbot.png" alt="Add Computer Bot" />
-                                </button>
+                    {/* Allow player to change color while in lobby, blocking taken ones */}
+                    <ColorPicker 
+                        selected={myBackendColor} 
+                        onSelect={(c) => sendMove && sendMove('SET_COLOR', { color: c })} 
+                        used={usedColors} 
+                    />
 
-                                <button 
-                                    className={`start-btn img-action-btn ${!canStart ? 'disabled' : ''}`} 
-                                    onClick={() => sendMove && sendMove("START_GAME")}
-                                    disabled={!canStart}
-                                >
-                                    <img src="/images/startgame.png" alt="Start Game" />
-                                </button>
-                                {!canStart && <p className="hint-text">Waiting for players...</p>}
-                            </div>
-                        ) : (
-                            <div className="waiting-container">
-                                <div className="spinner"></div>
-                                <p className="waiting-msg">Waiting for Host to start...</p>
-                            </div>
-                        )}
-                    </>
-                )}
+                    {isHost ? (
+                        <div className="host-controls"> 
+                            <button 
+                                className="add-bot-btn img-action-btn" 
+                                onClick={() => sendMove && sendMove("ADD_BOT")}
+                                disabled={players.length >= 4}
+                            >
+                                <img src="/images/buttons/addbot.webp" alt="Add Computer Bot" />
+                            </button>
+
+                            <button 
+                                className={`start-btn img-action-btn ${!canStart ? 'disabled' : ''}`} 
+                                onClick={() => sendMove && sendMove("START_GAME")}
+                                disabled={!canStart}
+                            >
+                                <img src="/images/buttons/startgame.webp" alt="Start Game" />
+                            </button>
+                            {!canStart && <p className="hint-text">Waiting for players...</p>}
+                        </div>
+                    ) : (
+                        <div className="waiting-container">
+                            <div className="spinner"></div>
+                            <p className="waiting-msg">Waiting for Host to start...</p>
+                        </div>
+                    )}
+                </div>
             </div>
-        </div>
+        </div>    
     );
 };

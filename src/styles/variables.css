@@ -45,7 +45,9 @@
   --shadow-panel: 0 10px 30px rgba(0, 0, 0, 0.5);
   --shadow-panel-soft: 0 10px 40px rgba(0, 0, 0, 0.3);
   --shadow-modal: 0 10px 40px rgba(0, 0, 0, 0.8);
-  --shadow-text: 2px 2px 0 black;
+  --shadow-text: -2px -2px 0 black;
+
+  --shadow-text-white: 0 0 2px rgba(255, 255, 255, 1);
 
   /* --- Overlay tints --- */
   --overlay-dim: rgba(0, 0, 0, 0.5);
@@ -65,6 +67,7 @@
   --z-noble-select: 51;
   --z-badge: 80;
   --z-active-player: 100;
+  --z-card-lift: 150; /* Hovered card in a stack (purchased or reserved) — must beat any sibling's inline zIndex */
   --z-modal-backdrop: 200;
   --z-how-to-play: 2000;
   --z-game-over: 1000;
@@ -73,13 +76,14 @@
   /* --- Theme-aware background images ---
      Default (no .theme-light ancestor) = dark-mode board skin.
      .theme-light overrides these to the light-mode skin below. */
-  --bg-board: url('/images/backgrounds/back1light.png');
-  --bg-tokens: url('/images/backgrounds/back2light.png');
-  --bg-player: url('/images/backgrounds/back3light.png');
+  --bg-board: url('/images/backgrounds/light1grey.webp');
+  --bg-tokens: url('/images/backgrounds/light2grey.webp');
+  --bg-player: url('/images/backgrounds/light3grey.webp');
 }
 
 .theme-light {
-  --bg-board: url('/images/backgrounds/back1dark.png');
-  --bg-tokens: url('/images/backgrounds/back2dark.png');
-  --bg-player: url('/images/backgrounds/back3dark.png');
+  --bg-board: url('/images/backgrounds/dark1grey.webp');
+  --bg-tokens: url('/images/backgrounds/dark2grey.webp');
+  --bg-player: url('/images/backgrounds/dark3grey.webp');
 }
+

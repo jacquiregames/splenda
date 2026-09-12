@@ -20,7 +20,7 @@ export const GameOverOverlay: React.FC<GameOverProps> = ({ winner, onRestart }) 
     <div className="game-over-overlay">
         <FireworksLayer intensity="high" />
         <div className="winner-box">
-            <img src="/images/crown.png" alt="Winner Crown" className="winner-crown" />
+            <img src="/images/gameover/crown.webp" alt="Winner Crown" className="winner-crown" />
             <div className="winner-name">{winner}</div>
             <button className="restart-btn" onClick={onRestart}> Back to Lobby </button>
         </div>

@@ -28,7 +28,7 @@
 @keyframes fadeInRight {
   from { opacity: 0; transform: translateX(-10px); }
   to { opacity: 1; transform: translateX(0); }
-}
+} 
 
 .token-actions h4 {
   margin: 0;
@@ -119,8 +119,8 @@
 
 .token-container {
   position: relative;
-  width: 90px;
-  height: 90px;
+  width: 5vw;
+  height: 10vh;
   border-radius: 50%;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
   background: transparent;
@@ -138,11 +138,7 @@
   width: 100%;
   height: 100%;
   border-radius: 50%;
-  object-fit: cover;
-  box-shadow:
-    4px 6px 8px rgba(0, 0, 0, 0.6),
-    inset -4px -4px 10px rgba(0, 0, 0, 0.5), /* Shadow side */
-    inset 4px 4px 10px rgba(255, 255, 255, 0.4); /* Highlight side */
+  object-fit: cover; 
 }
 
 .token-count {
@@ -155,6 +151,7 @@
   color: darkorange;
   text-shadow: 3px 3px 3px black, -1px -1px 0 #000;
   pointer-events: none;
+  -webkit-text-stroke: 1px black;
 }
 
 /* --- Glow effects ---
@@ -174,7 +171,7 @@
 .token-glow-red,
 .token-glow-brown,
 .token-glow-gold {
-  box-shadow: 0 0 25px var(--glow-color), inset 0 0 10px var(--glow-color-soft);
+  box-shadow: -4px -4px 4px var(--glow-color), -4px 4px 4px var(--glow-color), 4px -4px 4px var(--glow-color), 4px 4px 4px var(--glow-color); 
 }
 
 /* --- Your Turn Indicator --- */

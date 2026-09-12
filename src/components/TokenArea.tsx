@@ -52,7 +52,7 @@ export const TokenArea: React.FC<TokenAreaProps> = ({
 
                 {isMyTurn && !isDiscarding && (
                     <div className="token-container your-turn-indicator">
-                        <img src="/images/yourturn.webp" className="token-img" alt="Your Turn" />
+                        <img src="/images/yourturn/yourturn.webp" className="token-img" alt="Your Turn" />
                     </div>
                 )}
             </div>

@@ -5,46 +5,65 @@ export const getCriticalUIAssets = (): string[] => {
     const urls: string[] = [];
     
     const images = [
-        'background.png', 'login.png', 'logo.png', 'winner.png', 
-        'yourturn.webp', 'yourturn_left.webp', 'yourturn_right.webp',
-        'joingame.png', 'startgame.png', 'gamelog.png',
-        'confirm.png', 'clear.png', 'crown.png',
+        'images/backgrounds/background.webp', 'images/backgrounds/gamelog.webp', 
+        'images/lobby/login.webp', 'images/lobby/logo.webp', 
+        'images/yourturn/yourturn.webp', 'images/yourturn/yourturn_left.webp', 'images/yourturn/yourturn_right.webp',
+        'images/buttons/joingame.webp', 'images/buttons/startgame.webp', 'images/buttons/addbot.webp',
+        'images/buttons/confirm.webp', 'images/buttons/clear.webp', 'images/buttons/howtoplay.webp', 
+        'images/gameover/crown.webp','images/gameover/winner.webp', 
 
-        'playercolors/blue.png', 'playercolors/green.png', 'playercolors/purple.png',
-        'playercolors/red.png', 'playercolors/teal.png', 'playercolors/yellow.png', 
-        'playercolors/grey.png',
+        'images/playercolors/blue.webp', 'images/playercolors/green.webp', 'images/playercolors/purple.webp',
+        'images/playercolors/red.webp', 'images/playercolors/teal.webp', 'images/playercolors/yellow.webp', 
+        'images/playercolors/grey.webp',
 
-        'backgrounds/dark1blue.png', 'backgrounds/dark1green.png', 'backgrounds/dark1grey.png', 'backgrounds/dark1purple.png', 
-        'backgrounds/dark1red.png', 'backgrounds/dark1teal.png', 'backgrounds/dark1yellow.png', 
-        'backgrounds/dark2blue.png', 'backgrounds/dark2green.png', 'backgrounds/dark2grey.png', 'backgrounds/dark2purple.png', 
-        'backgrounds/dark2red.png', 'backgrounds/dark2teal.png', 'backgrounds/dark2yellow.png', 
-        'backgrounds/dark3blue.png', 'backgrounds/dark3green.png', 'backgrounds/dark3grey.png', 'backgrounds/dark3purple.png', 
-        'backgrounds/dark3red.png', 'backgrounds/dark3teal.png', 'backgrounds/dark3yellow.png', 
-        'backgrounds/light1blue.png', 'backgrounds/light1green.png', 'backgrounds/light1grey.png', 'backgrounds/light1purple.png', 
-        'backgrounds/light1red.png', 'backgrounds/light1teal.png', 'backgrounds/light1yellow.png', 
-        'backgrounds/light2blue.png', 'backgrounds/light2green.png', 'backgrounds/light2grey.png', 'backgrounds/light2purple.png', 
-        'backgrounds/light2red.png', 'backgrounds/light2teal.png', 'backgrounds/light2yellow.png', 
-        'backgrounds/light3blue.png', 'backgrounds/light3green.png', 'backgrounds/light3grey.png', 'backgrounds/light3purple.png', 
-        'backgrounds/light3red.png', 'backgrounds/light3teal.png', 'backgrounds/light3yellow.png'
+        'images/backgrounds/dark1blue.webp', 'images/backgrounds/dark1green.webp', 'images/backgrounds/dark1grey.webp', 'images/backgrounds/dark1purple.webp', 
+        'images/backgrounds/dark1red.webp', 'images/backgrounds/dark1teal.webp', 'images/backgrounds/dark1yellow.webp', 
+        'images/backgrounds/dark2blue.webp', 'images/backgrounds/dark2green.webp', 'images/backgrounds/dark2grey.webp', 'images/backgrounds/dark2purple.webp', 
+        'images/backgrounds/dark2red.webp', 'images/backgrounds/dark2teal.webp', 'images/backgrounds/dark2yellow.webp', 
+        'images/backgrounds/dark3blue.webp', 'images/backgrounds/dark3green.webp', 'images/backgrounds/dark3grey.webp', 'images/backgrounds/dark3purple.webp', 
+        'images/backgrounds/dark3red.webp', 'images/backgrounds/dark3teal.webp', 'images/backgrounds/dark3yellow.webp', 
+        'images/backgrounds/light1blue.webp', 'images/backgrounds/light1green.webp', 'images/backgrounds/light1grey.webp', 'images/backgrounds/light1purple.webp', 
+        'images/backgrounds/light1red.webp', 'images/backgrounds/light1teal.webp', 'images/backgrounds/light1yellow.webp', 
+        'images/backgrounds/light2blue.webp', 'images/backgrounds/light2green.webp', 'images/backgrounds/light2grey.webp', 'images/backgrounds/light2purple.webp', 
+        'images/backgrounds/light2red.webp', 'images/backgrounds/light2teal.webp', 'images/backgrounds/light2yellow.webp', 
+        'images/backgrounds/light3blue.webp', 'images/backgrounds/light3green.webp', 'images/backgrounds/light3grey.webp', 'images/backgrounds/light3purple.webp', 
+        'images/backgrounds/light3red.webp', 'images/backgrounds/light3teal.webp', 'images/backgrounds/light3yellow.webp'
     ];
 
-    images.forEach(img => urls.push(`${IMAGE_BASE_URL}/images/${img}`));
+    images.forEach(img => urls.push(`${IMAGE_BASE_URL}/${img}`));
     return urls;
 };
 
 export const getSpecificGameAssets = (): string[] => {
-    const urls: string[] = [];
-    const style = 'new';
+    const urls: string[] = []; 
 
     const tokens = ['BlueToken', 'BrownToken', 'GoldToken', 'GreenToken', 'RedToken', 'WhiteToken'];
-    tokens.forEach(t => urls.push(`${IMAGE_BASE_URL}/images/${style}/tokens/${t}.png`));
+    tokens.forEach(t => urls.push(`${IMAGE_BASE_URL}/images/tokens/${t}.webp`));
 
-    [1, 2, 3].forEach(r => urls.push(`${IMAGE_BASE_URL}/images/${style}/row${r}back.png`));
+    [1, 2, 3].forEach(r => urls.push(`${IMAGE_BASE_URL}/images/row${r}back.webp`));
 
-    const range = { start: 1, end: 40, folder: 'row1', pad: 3 };
-    for (let i = range.start; i <= range.end; i++) {
-        const filename = i.toString().padStart(range.pad, '0');
-        urls.push(`${IMAGE_BASE_URL}/images/${style}/${range.folder}/${filename}.png`);
+    const ranges = [
+        { start: 1, end: 40, folder: 'row1', pad: 3 },
+        { start: 41, end: 70, folder: 'row2', pad: 3 },
+        { start: 71, end: 90, folder: 'row3', pad: 3 },
+        { start: 20001, end: 20011, folder: 'row4', pad: 5 } // Nobles
+    ];
+    
+    ranges.forEach(range => {
+        for (let i = range.start; i <= range.end; i++) {
+            const filename = i.toString().padStart(range.pad, '0');
+            urls.push(`${IMAGE_BASE_URL}/images/${range.folder}/${filename}.webp`);
+        }
+    });
+
+    // Load score images (0 to 22)
+    for (let i = 0; i <= 22; i++) {
+        urls.push(`${IMAGE_BASE_URL}/images/score/${i}.webp`);
+    }
+
+    // Load token count images (1 to 10)
+    for (let i = 0; i <= 10; i++) {
+        urls.push(`${IMAGE_BASE_URL}/images/count/${i}.webp`);
     }
 
     return urls;

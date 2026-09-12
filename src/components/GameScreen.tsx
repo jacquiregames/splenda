@@ -138,7 +138,7 @@ export const GameScreen: React.FC<GameScreenProps> = ({
                     const { row, cardIndex } = payload;
                     const deckStartEl = document.getElementById(`deck-back-${row}`);
                     const slotEndId = `board-card-${row}-${cardIndex}`; 
-                    triggerAnimation(getAssetUrl(`images/row${row}back.png`, 'card'), deckStartEl, slotEndId, 100, undefined, 'half', 'card', playerName);
+                    triggerAnimation(getAssetUrl(`images/row${row}back.webp`, 'card'), deckStartEl, slotEndId, 100, undefined, 'half', 'card', playerName);
                 }
 
                 const payment = getPaymentDetails(me, card);
@@ -160,7 +160,7 @@ export const GameScreen: React.FC<GameScreenProps> = ({
                 const endTargets = [`reserved-card-${playerName}-${nextSlot}-peek`, `reserved-card-${playerName}-${nextSlot}`];
 
                 if (cardIndex === "deck") {
-                    triggerAnimation(getAssetUrl(`images/row${row}back.png`, 'card'), deckStartEl, endTargets, 0, undefined, false, 'card', playerName);
+                    triggerAnimation(getAssetUrl(`images/row${row}back.webp`, 'card'), deckStartEl, endTargets, 0, undefined, false, 'card', playerName);
                 } else {
                     const levelKey = `level${row}` as 'level1' | 'level2' | 'level3';
                     const card = gameState.board[levelKey][cardIndex];
@@ -172,7 +172,7 @@ export const GameScreen: React.FC<GameScreenProps> = ({
                     
                     triggerAnimation(getAssetUrl(card.FileName, 'card'), startEl, endTargets, 0, undefined, false, 'card', playerName);
                     const slotEndId = `board-card-${row}-${cardIndex}`;
-                    triggerAnimation(getAssetUrl(`images/row${row}back.png`, 'card'), deckStartEl, slotEndId, 100, undefined, 'half', 'card', playerName);
+                    triggerAnimation(getAssetUrl(`images/row${row}back.webp`, 'card'), deckStartEl, slotEndId, 100, undefined, 'half', 'card', playerName);
                 }
 
                 if (gameState.board.tokens.gold > 0) {
@@ -298,8 +298,8 @@ export const GameScreen: React.FC<GameScreenProps> = ({
   const mode = theme === 'dark' ? 'dark' : 'light';
   
   const dynamicStyles = {
-    '--bg-board': `url('/images/backgrounds/${mode}1${activeColor}.png')`,
-    '--bg-tokens': `url('/images/backgrounds/${mode}2${activeColor}.png')`
+    '--bg-board': `url('/images/backgrounds/${mode}1${activeColor}.webp')`,
+    '--bg-tokens': `url('/images/backgrounds/${mode}2${activeColor}.webp')`
   } as React.CSSProperties;
 
   return (
@@ -307,7 +307,7 @@ export const GameScreen: React.FC<GameScreenProps> = ({
       <YourTurnAnimation isMyTurn={!!isMyTurn} />
       {showTurnBanner && (
         <div className="turn-banner-overlay">
-          <img src="/images/your_turn_banner.png" alt="Your Turn!" className="turn-banner-gif" />
+          <img src="/images/yourturn/your_turn_banner.webp" alt="Your Turn!" className="turn-banner-gif" />
         </div>
       )}
 
@@ -358,7 +358,7 @@ export const GameScreen: React.FC<GameScreenProps> = ({
             isDiscarding={!!isDiscarding}
           />
           <button className="how-to-play-btn game-htp-btn" onClick={() => setShowHowToPlay(true)}>
-            <img src="/images/howtoplay.png" alt="How to Play" />
+            <img src="/images/buttons/howtoplay.webp" alt="How to Play" />
           </button>
         </div>
         

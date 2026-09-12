@@ -27,8 +27,8 @@ const ThemeToggle: React.FC<ThemeToggleProps> = ({ theme, onThemeToggle, useGrey
                 <input type="checkbox" checked={useGreyBg} onChange={onGreyToggle} />
                 <span className="slider round color-slider">
                     {/* Icons sit at opposite ends. Knob slides to cover one of them! */}
-                    <img src="/images/playercolors/grey.png" className="toggle-icon grey-swatch-icon" alt="Grey" />
-                    <img src={`/images/playercolors/${playerColor}.png`} className="toggle-icon color-swatch-icon" alt="Color" />
+                    <img src="/images/playercolors/grey.webp" className="toggle-icon grey-swatch-icon" alt="Grey" />
+                    <img src={`/images/playercolors/${playerColor}.webp`} className="toggle-icon color-swatch-icon" alt="Color" />
                 </span>
             </label>
         </div>

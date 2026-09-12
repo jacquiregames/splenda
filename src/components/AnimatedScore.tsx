@@ -13,6 +13,7 @@ export const AnimatedScore: React.FC<AnimatedScoreProps> = ({
     animClassName = 'score-increase-anim' 
 }) => {
     const [isAnimating, setIsAnimating] = useState(false);
+    const [imageError, setImageError] = useState(false);
     const prevScore = useRef(score);
 
     useEffect(() => {
@@ -25,9 +26,23 @@ export const AnimatedScore: React.FC<AnimatedScoreProps> = ({
         prevScore.current = score;
     }, [score]);
 
+    // Reset fallback if score changes
+    useEffect(() => {
+        setImageError(false);
+    }, [score]);
+
     return (
-        <span className={`${className} ${isAnimating ? animClassName : ''}`}>
-            {score}
-        </span>
+        <div className={`${className} ${isAnimating ? animClassName : ''}`}>
+            {score >= 0 && !imageError ? (
+                <img 
+                    src={`/images/score/${score}.webp`} 
+                    alt={score.toString()} 
+                    className="score-img"
+                    onError={() => setImageError(true)} 
+                />
+            ) : (
+                <span className={`${className}-text`}>{score}</span>
+            )}
+        </div>
     );
 };

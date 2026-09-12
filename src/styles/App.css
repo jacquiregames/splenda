@@ -5,11 +5,15 @@ html, body, #root, .App {
   height: 100%;
   overflow-y: hidden;
   margin: 0;
+  background-image: url('/images/backgrounds/background.webp');
+  background-size: cover; /* or whatever your sizing is */
+  background-color: #121212; /* Fills in with dark color just in case */
 }
+
 
 .game-container {
   background-color: var(--color-bg-dark);
-  background-image: url('/images/background.png');
+  background-image: url('/images/backgrounds/background.webp');
   background-size: 100% 100%;
   background-position: center;
   background-repeat: no-repeat;
@@ -55,7 +59,7 @@ html, body, #root, .App {
 .Toastify__toast--warning,
 .Toastify__toast--success,
 .Toastify__toast--error {
-  background: url('/images/toast.png') no-repeat center/100% 100% !important;
+  background: url('/images/backgrounds/toast.webp') no-repeat center/100% 100% !important;
   color: var(--color-text-light);
   text-shadow: 0 0 8px rgba(0, 0, 0, 0.9), 2px 2px 4px rgba(0, 0, 0, 0.8);
   justify-content: center !important;

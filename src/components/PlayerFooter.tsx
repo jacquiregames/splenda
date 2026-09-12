@@ -1,5 +1,5 @@
 // src/components/PlayerFooter.tsx
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import type { Player, CardData } from '../types';
 import { getAssetUrl, COLORS } from '../constants';
 import { GameLog } from './GameLog';
@@ -31,6 +31,28 @@ interface PlayerFooterProps {
   lastMove?: any; 
   actionFocusPlayerId: string | null;
 }
+
+const TokenCountDisplay: React.FC<{ count: number }> = ({ count }) => {
+  const [error, setError] = useState(false);
+  
+  useEffect(() => { 
+      setError(false); 
+  }, [count]);
+
+  // Fallback to text if image errors out or if count > 10
+  if (error || count > 10) {
+      return <span className="p-token-count">{count}</span>;
+  }
+  
+  return (
+      <img 
+          src={`/images/count/${count}.png`} 
+          alt={count.toString()} 
+          className="p-token-count-img" 
+          onError={() => setError(true)} 
+      />
+  );
+};
 
 // FIX: Lifted pure function outside of component render cycle
 const getStacks = (purchased: CardData[]) => {
@@ -100,7 +122,7 @@ export const PlayerFooter: React.FC<PlayerFooterProps> = ({
     
     const effectiveColor = (isMe && useGreyBg) ? 'grey' : (p.color || 'blue');
     const mode = theme === 'dark' ? 'dark' : 'light';
-    const dynamicBg = `url('/images/backgrounds/${mode}3${effectiveColor}.png')`;
+    const dynamicBg = `url('/images/backgrounds/${mode}3${effectiveColor}.webp')`;
     
     return (
       <div 
@@ -130,11 +152,11 @@ export const PlayerFooter: React.FC<PlayerFooterProps> = ({
                     disabled={!isTokenMoveValid}
                     onClick={onConfirmTokens}
                   >
-                    <img src="/images/confirm.png" alt="Confirm" className="btn-icon" />
+                    <img src="/images/buttons/confirm.webp" alt="Confirm" className="btn-icon" />
                   </button>
 
                   <button className="reset-btn" onClick={onClearTokens}>
-                    <img src="/images/clear.png" alt="Clear" className="btn-icon" />
+                    <img src="/images/buttons/clear.webp" alt="Clear" className="btn-icon" />
                   </button>
                 </div>
               </div>
@@ -142,7 +164,7 @@ export const PlayerFooter: React.FC<PlayerFooterProps> = ({
             <div className="p-identity">
               <AnimatedScore score={p.points} className="p-score" animClassName="score-increase-anim" />
               <span className="p-separator">|</span>
-              <span className="p-token-count">{totalTokens}</span>
+              <TokenCountDisplay count={totalTokens} />
               <span className="p-separator">-</span>
               <div className="p-name">{isMe ? 'You' : p.id}</div>
             </div>
@@ -166,10 +188,10 @@ export const PlayerFooter: React.FC<PlayerFooterProps> = ({
               </div>
               <div className="staging-actions">
                 <button className="confirm-btn" disabled={!isDiscardValid} onClick={onConfirmDiscard}>
-                  <img src="/images/confirm.png" alt="Confirm" className="btn-icon" />
+                  <img src="/images/buttons/confirm.webp" alt="Confirm" className="btn-icon" />
                 </button>
                 <button className="reset-btn" onClick={onClearTokens}>
-                  <img src="/images/clear.png" alt="Clear" className="btn-icon" />
+                  <img src="/images/buttons/clear.webp" alt="Clear" className="btn-icon" />
                 </button>
               </div>
             </div>
@@ -276,7 +298,7 @@ export const PlayerFooter: React.FC<PlayerFooterProps> = ({
                                     key={i} 
                                     id={domId(`reserved-card-${p.id}-${i}`)} 
                                     className="res-back"
-                                    src={getAssetUrl(`images/row${card.cardRow}back.png`, 'card')}
+                                    src={getAssetUrl(`images/row${card.cardRow}back.webp`, 'card')}
                                     style={{ top: `${i * 35}px`, zIndex: i }}
                                     alt="opponent reserved card"
                                 />

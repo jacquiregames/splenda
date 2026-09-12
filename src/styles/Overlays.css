@@ -108,7 +108,7 @@
 .winner-box {
   pointer-events: auto; /* Re-enables clicking the restart button */
 
-  background-image: url('/images/winner.png');
+  background-image: url('/images/gameover/winner.webp');
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
@@ -140,10 +140,10 @@
 
 .winner-crown {
   position: absolute;
-  top: 31%;
-  left: 25.25%;
+  top: 29%;
+  left: 25%;
   transform: translateX(-50%);
-  width: 150px;
+  width: 200px;
   height: auto;
   filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.5));
   animation: popIn 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);

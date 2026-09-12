@@ -11,7 +11,7 @@
   background: var(--overlay-heavy);
 
   border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: 12px;
+  border-radius: 0px;
   padding: 15px;
   width: 130px;
   display: flex;
@@ -31,7 +31,7 @@
   content: "";
   position: absolute;
   inset: 0;
-  background-image: url('/images/gamelog.png');
+  background-image: url('/images/backgrounds/gamelog.webp');
   background-size: 100% 100%;
   background-position: center;
   background-repeat: no-repeat;
@@ -62,38 +62,17 @@
   gap: 2px;
 }
  
-@keyframes scoreBump {
-  0%   { transform: scale(1); }
-  40%  { 
-    transform: scale(1.18); 
-    color: #ffe36b; 
-    text-shadow: 0 0 14px #ffd700, 0 0 28px #ffd700; 
-  }
-  100% { transform: scale(1); }
-}
-
-.score-increase-anim {
-  animation: scoreBump 0.35s ease;
-  will-change: transform, color, text-shadow;
-} 
-
 .turn-row {
   display: flex;
   align-items: center;
   padding: 6px 6px;
-  border-radius: 6px;
+  border-radius: 0px;
   font-size: 16px;
   color: rgba(255, 255, 255, 0.7);
   transition: all 0.2s ease;
   border-left: 3px solid transparent;
 }
-
-.score-increase-anim {
-  animation: scoreBump 0.35s ease;
-  will-change: transform, color, text-shadow;
-};
  
-
 .turn-row.active-turn {
   /* Slightly darkened background so the active row pops against the image */
   background: rgba(46, 204, 113, 0.3);
@@ -118,40 +97,60 @@
 }
 
 .turn-score {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 28px;
+  margin-left: 5px;
+}
+
+.turn-score-text {
   font-weight: 900;
   color: var(--color-gold);
   background: rgba(0, 0, 0, 0.5); /* Dark background so it pops */
   padding: 2px 8px;
-  border-radius: 10px;
+  padding-bottom: 5px;
+  border-radius: 0px;
   font-size: 14px;
-  margin-left: 5px;
   border: 1px solid rgba(241, 196, 15, 0.3);
   text-shadow: 1px 1px 2px black;
   display: inline-block;
 }
 
+.turn-score .score-img {
+  height: 100%;
+  width: auto;
+  object-fit: contain;
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.5));
+}
+
+/* Brighten the score badge a bit when it's that player's turn */
+.active-turn .turn-score-text {
+  border-color: var(--color-gold);
+  box-shadow: 0 0 8px rgba(241, 196, 15, 0.6);
+  color: var(--color-text-light);
+}
+
+.active-turn .turn-score .score-img {
+  filter: drop-shadow(0 0 6px rgba(241, 196, 15, 0.8));
+}
+
 @keyframes gamelogScoreBump {
-  0%   { transform: scale(1); }
+  0%   { transform: scale(1); filter: drop-shadow(0 0 0px transparent); }
   40%  { 
     transform: scale(1.18); 
     color: #ffe36b; 
     border-color: #ffd700;
     box-shadow: 0 0 8px rgba(255, 215, 0, 0.6);
     text-shadow: 0 0 10px #ffd700; 
+    filter: drop-shadow(0 0 6px #ffd700);
   }
-  100% { transform: scale(1); }
+  100% { transform: scale(1); filter: drop-shadow(0 0 0px transparent); }
 }
 
 .gamelog-score-anim {
   animation: gamelogScoreBump 0.35s ease;
-  will-change: transform, color, border-color, box-shadow, text-shadow;
+  will-change: transform, color, border-color, box-shadow, text-shadow, filter;
   z-index: 5;
   position: relative;
-}
-
-/* Brighten the score badge a bit when it's that player's turn */
-.active-turn .turn-score {
-  border-color: var(--color-gold);
-  box-shadow: 0 0 8px rgba(241, 196, 15, 0.6);
-  color: var(--color-text-light);
 }
