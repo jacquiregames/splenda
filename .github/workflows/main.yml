@@ -1,35 +1,49 @@
-- name: Setup pnpm
-  # You may pin to the exact commit or the version.
-  # uses: pnpm/action-setup@0977fd99725f1db4007ccb2928dbb4e90d06cc86
-  uses: pnpm/action-setup@v6.0.10
-  with:
-    # Version of pnpm to install
-    version: # optional
-    # Where to store pnpm files
-    dest: # optional, default is ~/setup-pnpm
-    # If specified, run `pnpm install`
-    run_install: # optional, default is null
-    # Whether to cache the pnpm store directory
-    cache: # optional, default is false
-    # File path to the pnpm lockfile, whose contents hash will be used as a cache key. Accepts multiple paths delimited by newlines.
-    cache_dependency_path: # optional, default is pnpm-lock.yaml
-    # File path to the package.json to read "packageManager" configuration. This path must be relative to the repository root (GITHUB_WORKSPACE).
-    package_json_file: # optional, default is package.json
-    # When set to true, @pnpm/exe, which is a Node.js bundled package, will be installed, enabling using pnpm without Node.js.
-    standalone: # optional, default is false
+name: Build Windows App
 
-- name: PyInstaller Windows
-  # You may pin to the exact commit or the version.
-  # uses: JackMcKew/pyinstaller-action-windows@a8dee21ad01bbc7e7363d445bb632691b95ba057
-  uses: JackMcKew/pyinstaller-action-windows@v0.1.2
-  with:
-    # Directory containing source code (optional requirements.txt).
-    path: # default is src
-    # Specify a custom URL for PYPI
-    pypi_url: # optional, default is https://pypi.python.org/
-    # Specify a custom URL for PYPI Index
-    pypi_index_url: # optional, default is https://pypi.python.org/simple
-    # Specify a file path for .spec file
-    spec: # optional, default is 
+on:
+  push:
+    branches: [ main ] # Triggers when you push to main
+  workflow_dispatch:   # Allows manual trigger from the GitHub Actions tab
 
-  
+jobs:
+  build-windows:
+    runs-on: windows-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v5
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: 24
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@v6
+        with:
+          version: 8
+
+      - name: Build React Frontend
+        run: |
+          pnpm install
+          pnpm run build
+
+      - name: Setup Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: 3.11
+
+      - name: Install Python Dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install fastapi uvicorn websockets pydantic pywebview pyinstaller
+
+      - name: Package with PyInstaller
+        # This bundles the python env, the Vite /dist folder, and your /public images into a single .exe
+        run: |
+          pyinstaller --noconfirm --onefile --windowed --name "Splenda" --distpath "out" --add-data "dist;dist" --add-data "public;public" desktop.py
+
+      - name: Upload Windows Executable
+        uses: actions/upload-artifact@v6
+        with:
+          name: Splenda-Windows-App
+          path: out/Splenda.exe
