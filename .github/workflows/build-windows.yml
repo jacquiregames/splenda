@@ -1,8 +1,6 @@
 name: Build Windows App
 
 on:
-  push:
-    branches: [ main ] # Triggers when you push to main
   workflow_dispatch:   # Allows manual trigger from the GitHub Actions tab
 
 jobs:
